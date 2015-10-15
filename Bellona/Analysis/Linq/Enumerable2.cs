@@ -4,8 +4,17 @@ using System.Linq;
 
 namespace Bellona.Linq
 {
+    /// <summary>
+    /// Provides a set of methods to extend LINQ to Objects.
+    /// </summary>
     public static class Enumerable2
     {
+        /// <summary>
+        /// Creates an <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> from a single object.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the input object.</returns>
         public static IEnumerable<TSource> ToEnumerable<TSource>(this TSource obj)
         {
             yield return obj;
