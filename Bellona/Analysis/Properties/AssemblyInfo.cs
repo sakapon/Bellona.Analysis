@@ -1,18 +1,23 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Analysis")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Bellona.Analysis")]
+[assembly: AssemblyDescription("The library for statistical analysis.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Analysis")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Keiho Sakapon")]
+[assembly: AssemblyProduct("Bellona")]
+[assembly: AssemblyCopyright("© 2015 Keiho Sakapon")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyMetadata("ProjectUrl", "https://github.com/sakapon/Bellona.Analysis")]
+[assembly: AssemblyMetadata("LicenseUrl", "https://github.com/sakapon/Bellona.Analysis/blob/master/LICENSE")]
+[assembly: AssemblyMetadata("Tags", "Machine Learning")]
+[assembly: AssemblyMetadata("ReleaseNotes", "")]
 
 // ComVisible を false に設定すると、その型はこのアセンブリ内で COM コンポーネントから 
 // 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、
@@ -34,3 +39,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: CLSCompliant(true)]
+[assembly: InternalsVisibleTo("UnitTest")]
