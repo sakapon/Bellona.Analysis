@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTest
+namespace UnitTest.Core
 {
     [TestClass]
-    public class UnitTest1
+    public class RandomHelperTest
     {
         [TestMethod]
         public void TestMethod1()
