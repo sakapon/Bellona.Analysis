@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Clustering\ClusteringModelTest.cs" />
     <Compile Include="Core\RandomHelperTest.cs" />
     <Compile Include="Core\DeviationModelTest.cs" />
     <Compile Include="Linq\Enumerable2Test.cs" />
