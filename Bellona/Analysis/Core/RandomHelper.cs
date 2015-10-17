@@ -8,6 +8,13 @@ namespace Bellona.Core
     {
         static readonly Random _random = new Random();
 
+        public static double NextDouble(double maxValue)
+        {
+            if (maxValue < 0) throw new ArgumentOutOfRangeException("maxValue", "maxValue is less than 0.");
+
+            return NextDouble(0, maxValue);
+        }
+
         public static double NextDouble(double minValue, double maxValue)
         {
             return minValue + (maxValue - minValue) * _random.NextDouble();
@@ -37,7 +44,7 @@ namespace Bellona.Core
         public static T GetRandomElement<T>(this IList<T> source)
         {
             if (source == null) throw new ArgumentNullException("source");
-            if (source.Count == 0) throw new ArgumentException("The array must have elements.", "source");
+            if (source.Count == 0) throw new ArgumentException("The list must not be empty.", "source");
 
             return source[_random.Next(source.Count)];
         }
