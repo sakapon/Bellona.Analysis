@@ -9,18 +9,43 @@ namespace Bellona.Core
         public double[] Value { get; private set; }
 
         public int Dimension { get { return Value.Length; } }
-        public double Norm { get { return Math.Sqrt(Value.Sum(x => x * x)); } }
+
+        Lazy<double> _norm;
+        public double Norm { get { return _norm.Value; } }
 
         public ArrayVector(double[] value)
         {
             if (value == null) throw new ArgumentNullException("value");
+            if (value.Length == 0) throw new ArgumentException("The dimension of the array must be positive.", "value");
 
             Value = value;
+
+            _norm = new Lazy<double>(() => Math.Sqrt(Value.Sum(x => x * x)));
         }
 
         public static implicit operator ArrayVector(double[] value)
         {
             return new ArrayVector(value);
+        }
+
+        public static bool operator ==(ArrayVector v1, ArrayVector v2)
+        {
+            return Enumerable.SequenceEqual(v1.Value, v2.Value);
+        }
+
+        public static bool operator !=(ArrayVector v1, ArrayVector v2)
+        {
+            return !(v1 == v2);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ArrayVector && this == (ArrayVector)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value[0].GetHashCode();
         }
 
         public override string ToString()
