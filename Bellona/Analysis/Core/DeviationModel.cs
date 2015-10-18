@@ -7,9 +7,9 @@ namespace Bellona.Core
 {
     public static class DeviationModel
     {
-        public static DeviationModel<T> Create<T>(IList<T> records, Func<T, ArrayVector> featuresSelector)
+        public static DeviationModel<T> Create<T>(IList<T> source, Func<T, ArrayVector> featuresSelector)
         {
-            return new DeviationModel<T>(records, featuresSelector);
+            return new DeviationModel<T>(source, featuresSelector);
         }
     }
 
@@ -24,9 +24,12 @@ namespace Bellona.Core
         Lazy<double> _standardDeviation;
         public double StandardDeviation { get { return _standardDeviation.Value; } }
 
-        public DeviationModel(IList<T> records, Func<T, ArrayVector> featuresSelector)
+        public DeviationModel(IList<T> source, Func<T, ArrayVector> featuresSelector)
         {
-            Records = records.Select(r => new DeviationRecord<T>(this, r, featuresSelector)).ToArray();
+            if (source == null) throw new ArgumentNullException("source");
+            if (source.Count == 0) throw new ArgumentException("The list must not be empty.", "source");
+
+            Records = source.Select(e => new DeviationRecord<T>(this, e, featuresSelector)).ToArray();
 
             _mean = new Lazy<ArrayVector>(() => ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()));
             _standardDeviation = new Lazy<double>(() => Math.Sqrt(Records.Sum(r => r.Deviation * r.Deviation) / Records.Length));

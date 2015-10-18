@@ -38,8 +38,8 @@ namespace Bellona.Clustering
         {
             if (Clusters == null) throw new InvalidOperationException("This model is not trained.");
 
-            var features = _featuresSelector(element);
-            return Clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, features));
+            var record = new ClusteringRecord<T>(element, _featuresSelector);
+            return AssignRecord(Clusters, record);
         }
 
         static Cluster<T>[] InitializeClusters(int clustersNumber, IList<ClusteringRecord<T>> records)
@@ -55,10 +55,15 @@ namespace Bellona.Clustering
         static Cluster<T>[] TrainOnce(Cluster<T>[] clusters, IEnumerable<ClusteringRecord<T>> records)
         {
             return records
-                .GroupBy(r => clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, r.Features)))
+                .GroupBy(r => AssignRecord(clusters, r))
                 .OrderBy(g => g.Key.Id)
                 .Select((g, i) => new Cluster<T>(i, g))
                 .ToArray();
+        }
+
+        static Cluster<T> AssignRecord(Cluster<T>[] clusters, ClusteringRecord<T> record)
+        {
+            return clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, record.Features));
         }
     }
 
