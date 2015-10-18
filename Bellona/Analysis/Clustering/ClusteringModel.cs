@@ -23,19 +23,21 @@ namespace Bellona.Clustering
             _featuresSelector = featuresSelector;
         }
 
-        public void Train(IEnumerable<T> source, int iterationsNumber)
+        public void Train(IEnumerable<T> source, int? maxIterations = null)
         {
             _records.AddRange(source.Select(e => new ClusteringRecord<T>(e, _featuresSelector)));
 
             if (Clusters == null)
                 Clusters = InitializeClusters(ClustersNumber, _records);
 
-            for (var i = 0; i < iterationsNumber; i++)
-            {
-                var newClusters = TrainOnce(Clusters, _records);
-                if (ClustersEquals(Clusters, newClusters)) break;
-                Clusters = newClusters;
-            }
+            var iterator = Enumerable2.Repeat(true);
+            if (maxIterations.HasValue)
+                iterator = iterator.Take(maxIterations.Value);
+
+            iterator
+                .Select(_ => TrainOnce(Clusters, _records))
+                .TakeWhile(cs => !ClustersEquals(Clusters, cs))
+                .Execute(cs => Clusters = cs);
         }
 
         public Cluster<T> AssignElement(T element)

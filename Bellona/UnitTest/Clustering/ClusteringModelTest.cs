@@ -14,7 +14,21 @@ namespace UnitTest.Clustering
         public void Test_1()
         {
             var model = new ClusteringModel<Color>(20, c => new double[] { c.R, c.G, c.B });
-            model.Train(TestData.GetColors(), 50);
+            model.Train(TestData.GetColors());
+
+            model.Clusters
+                .Do(c => Console.WriteLine(c.Id))
+                .Execute(c => c.Records.Execute(r => Console.WriteLine(r.Element)));
+
+            var cluster = model.AssignElement(Color.FromArgb(0, 92, 175)); // Ruri
+            Console.WriteLine("Ruri: {0}", cluster.Id);
+        }
+
+        [TestMethod]
+        public void Test_2()
+        {
+            var model = new ClusteringModel<Color>(20, c => new double[] { c.R, c.G, c.B });
+            model.Train(TestData.GetColors(), 3);
 
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
