@@ -56,7 +56,7 @@ namespace Bellona.Core
             Features = featuresSelector(element);
 
             _deviation = new Lazy<double>(() => ArrayVector.GetDistance(DeviationModel.Mean, Features));
-            _standardScore = new Lazy<double>(() => Deviation / DeviationModel.StandardDeviation);
+            _standardScore = new Lazy<double>(() => DeviationModel.StandardDeviation == 0 ? 0 : Deviation / DeviationModel.StandardDeviation);
         }
 
         string ToDebugString()
