@@ -13,29 +13,44 @@ namespace UnitTest.Clustering
         [TestMethod]
         public void Test_1()
         {
-            var model = new ClusteringModel<Color>(20, c => new double[] { c.R, c.G, c.B });
+            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B });
             model.Train(TestData.GetColors());
-
-            model.Clusters
-                .Do(c => Console.WriteLine(c.Id))
-                .Execute(c => c.Records.Execute(r => Console.WriteLine(r.Element)));
+            DisplayResultForColors(model);
 
             var cluster = model.AssignElement(Color.FromArgb(0, 92, 175)); // Ruri
-            Console.WriteLine("Ruri: {0}", cluster.Id);
+            Console.WriteLine("Ruri: Cluster {0}", cluster.Id);
         }
 
         [TestMethod]
         public void Test_2()
         {
-            var model = new ClusteringModel<Color>(20, c => new double[] { c.R, c.G, c.B });
-            model.Train(TestData.GetColors(), 3);
+            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B }, 10);
+            model.Train(TestData.GetColors());
+            DisplayResultForColors(model);
+        }
 
+        [TestMethod]
+        public void Test_3()
+        {
+            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B }, maxStandardScore: 1.2);
+            model.Train(TestData.GetColors());
+            DisplayResultForColors(model);
+        }
+
+        [TestMethod]
+        public void Test_4()
+        {
+            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B });
+            model.Train(TestData.GetColors(), 3);
+            DisplayResultForColors(model);
+        }
+
+        void DisplayResultForColors(ClusteringModel<Color> model)
+        {
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
-                .Execute(c => c.Records.Execute(r => Console.WriteLine(r.Element)));
-
-            var cluster = model.AssignElement(Color.FromArgb(0, 92, 175)); // Ruri
-            Console.WriteLine("Ruri: {0}", cluster.Id);
+                .SelectMany(c => c.DeviationInfo.Records)
+                .Execute(r => Console.WriteLine("{0:F3}, {1}, {2}", r.StandardScore, r.Features, r.Element.Element.Name));
         }
     }
 }

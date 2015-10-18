@@ -9,7 +9,8 @@ namespace Bellona.Clustering
 {
     public class ClusteringModel<T>
     {
-        public int ClustersNumber { get; private set; }
+        public int? ClustersNumber { get; private set; }
+        public double MaxStandardScore { get; private set; }
         public Cluster<T>[] Clusters { get; private set; }
 
         Func<T, ArrayVector> _featuresSelector;
@@ -17,9 +18,10 @@ namespace Bellona.Clustering
         List<ClusteringRecord<T>> _records = new List<ClusteringRecord<T>>();
         public ClusteringRecord<T>[] Records { get { return _records.ToArray(); } }
 
-        public ClusteringModel(int clustersNumber, Func<T, ArrayVector> featuresSelector)
+        public ClusteringModel(Func<T, ArrayVector> featuresSelector, int? clustersNumber = null, double maxStandardScore = 1.5)
         {
             ClustersNumber = clustersNumber;
+            MaxStandardScore = maxStandardScore;
             _featuresSelector = featuresSelector;
         }
 
@@ -28,7 +30,7 @@ namespace Bellona.Clustering
             _records.AddRange(source.Select(e => new ClusteringRecord<T>(e, _featuresSelector)));
 
             if (Clusters == null)
-                Clusters = InitializeClusters(ClustersNumber, _records);
+                Clusters = InitializeClusters(ClustersNumber.Value, _records);
 
             var iterator = Enumerable2.Repeat(true);
             if (maxIterations.HasValue)
