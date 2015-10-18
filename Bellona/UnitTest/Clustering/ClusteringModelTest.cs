@@ -19,6 +19,9 @@ namespace UnitTest.Clustering
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
                 .Execute(c => c.Records.Execute(r => Console.WriteLine(r.Element)));
+
+            var cluster = model.AssignElement(Color.FromArgb(0, 92, 175)); // Ruri
+            Console.WriteLine("Ruri: {0}", cluster.Id);
         }
     }
 }
