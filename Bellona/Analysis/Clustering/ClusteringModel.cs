@@ -29,9 +29,43 @@ namespace Bellona.Clustering
         {
             _records.AddRange(source.Select(e => new ClusteringRecord<T>(e, _featuresSelector)));
 
+            if (ClustersNumber.HasValue)
+                TrainForFixedClustersNumber(maxIterations);
+            else
+                TrainForFreeClustersNumber(maxIterations);
+        }
+
+        void TrainForFixedClustersNumber(int? maxIterations = null)
+        {
             if (Clusters == null)
                 Clusters = InitializeClusters(ClustersNumber.Value, _records);
 
+            TrainIteratively(maxIterations);
+        }
+
+        void TrainForFreeClustersNumber(int? maxIterations = null)
+        {
+            var farthestRecord = default(DeviationRecord<ClusteringRecord<T>>);
+
+            if (Clusters == null)
+            {
+                Clusters = new[] { new Cluster<T>(0, _records) };
+                farthestRecord = GetFarthestRecord(Clusters);
+                if (farthestRecord.StandardScore <= MaxStandardScore) return;
+            }
+
+            for (var i = Clusters.Length; i < _records.Count; i++)
+            {
+                var newCluster = new Cluster<T>(i, farthestRecord.Element.ToEnumerable());
+                Clusters = Clusters.Concat(newCluster.ToEnumerable()).ToArray();
+                TrainIteratively(maxIterations);
+                farthestRecord = GetFarthestRecord(Clusters);
+                if (farthestRecord.StandardScore <= MaxStandardScore) break;
+            }
+        }
+
+        void TrainIteratively(int? maxIterations = null)
+        {
             var iterator = Enumerable2.Repeat(true);
             if (maxIterations.HasValue)
                 iterator = iterator.Take(maxIterations.Value);
@@ -72,6 +106,13 @@ namespace Bellona.Clustering
         static Cluster<T> AssignRecord(Cluster<T>[] clusters, ClusteringRecord<T> record)
         {
             return clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, record.Features));
+        }
+
+        static DeviationRecord<ClusteringRecord<T>> GetFarthestRecord(Cluster<T>[] clusters)
+        {
+            return clusters
+                .SelectMany(c => c.DeviationInfo.Records)
+                .FirstToMax(r => r.StandardScore);
         }
 
         static bool ClustersEquals(Cluster<T>[] clusters1, Cluster<T>[] clusters2)
