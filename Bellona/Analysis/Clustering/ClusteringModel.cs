@@ -31,7 +31,11 @@ namespace Bellona.Clustering
                 Clusters = InitializeClusters(ClustersNumber, _records);
 
             for (var i = 0; i < iterationsNumber; i++)
-                Clusters = TrainOnce(Clusters, _records);
+            {
+                var newClusters = TrainOnce(Clusters, _records);
+                if (ClustersEquals(Clusters, newClusters)) break;
+                Clusters = newClusters;
+            }
         }
 
         public Cluster<T> AssignElement(T element)
@@ -64,6 +68,22 @@ namespace Bellona.Clustering
         static Cluster<T> AssignRecord(Cluster<T>[] clusters, ClusteringRecord<T> record)
         {
             return clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, record.Features));
+        }
+
+        static bool ClustersEquals(Cluster<T>[] clusters1, Cluster<T>[] clusters2)
+        {
+            if (clusters1.Length != clusters2.Length) return false;
+
+            return Enumerable.Range(0, clusters1.Length)
+                .All(i => ClusterEquals(clusters1[i], clusters2[i]));
+        }
+
+        static bool ClusterEquals(Cluster<T> cluster1, Cluster<T> cluster2)
+        {
+            if (cluster1.Records.Length != cluster2.Records.Length) return false;
+
+            return Enumerable.Range(0, cluster1.Records.Length)
+                .All(i => cluster1.Records[i] == cluster2.Records[i]);
         }
     }
 
