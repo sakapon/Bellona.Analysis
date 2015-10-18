@@ -6,7 +6,14 @@ namespace Bellona.Core
 {
     public static class RandomHelper
     {
-        static Random _random = new Random();
+        static readonly Random _random = new Random();
+
+        public static double NextDouble(double maxValue)
+        {
+            if (maxValue < 0) throw new ArgumentOutOfRangeException("maxValue", "maxValue is less than 0.");
+
+            return NextDouble(0, maxValue);
+        }
 
         public static double NextDouble(double minValue, double maxValue)
         {
@@ -32,6 +39,26 @@ namespace Bellona.Core
                 yield return l[index];
                 l.RemoveAt(index);
             }
+        }
+
+        public static T GetRandomElement<T>(this IList<T> source)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (source.Count == 0) throw new ArgumentException("The list must not be empty.", "source");
+
+            return source[_random.Next(source.Count)];
+        }
+
+        public static IEnumerable<T> GetRandomPiece<T>(this IList<T> source, int count)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (count < 0) throw new ArgumentOutOfRangeException("count", count, "The value must be non-negative.");
+
+            if (count == 0) return Enumerable.Empty<T>();
+            if (count >= source.Count) return source;
+
+            return Enumerable.Range(_random.Next(source.Count - count + 1), count)
+                .Select(i => source[i]);
         }
     }
 }

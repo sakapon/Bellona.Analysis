@@ -12,12 +12,18 @@ namespace Bellona.Linq
         /// <summary>
         /// Creates an <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> from a single object.
         /// </summary>
-        /// <typeparam name="TSource">The type of the object.</typeparam>
-        /// <param name="obj">An object.</param>
+        /// <typeparam name="TResult">The type of the object.</typeparam>
+        /// <param name="element">An object.</param>
         /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the input object.</returns>
-        public static IEnumerable<TSource> ToEnumerable<TSource>(this TSource obj)
+        public static IEnumerable<TResult> ToEnumerable<TResult>(this TResult element)
         {
-            yield return obj;
+            yield return element;
+        }
+
+        public static IEnumerable<TResult> Repeat<TResult>(TResult element)
+        {
+            while (true)
+                yield return element;
         }
 
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
@@ -36,9 +42,7 @@ namespace Bellona.Linq
         {
             if (source == null) throw new ArgumentNullException("source");
 
-            foreach (var item in source)
-            {
-            }
+            foreach (var item in source) ;
         }
 
         public static void Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
@@ -47,9 +51,7 @@ namespace Bellona.Linq
             if (action == null) throw new ArgumentNullException("action");
 
             foreach (var item in source)
-            {
                 action(item);
-            }
         }
 
         public static IEnumerable<TSource> Distinct<TSource, TValue>(this IEnumerable<TSource> source, Func<TSource, TValue> selector)
@@ -64,6 +66,28 @@ namespace Bellona.Linq
                 if (!valueSet.Add(value)) continue;
                 yield return item;
             }
+        }
+
+        public static IEnumerable<TSource[]> Segment<TSource>(this IEnumerable<TSource> source, int lengthInSegment)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (lengthInSegment <= 0) throw new ArgumentOutOfRangeException("lengthInSegment", lengthInSegment, "The value must be positive.");
+
+            var l = new List<TSource>();
+
+            foreach (var item in source)
+            {
+                l.Add(item);
+
+                if (l.Count == lengthInSegment)
+                {
+                    yield return l.ToArray();
+                    l.Clear();
+                }
+            }
+
+            if (l.Count > 0)
+                yield return l.ToArray();
         }
 
         public static TSource FirstToMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector)
