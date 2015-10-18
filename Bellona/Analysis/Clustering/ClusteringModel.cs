@@ -12,10 +12,10 @@ namespace Bellona.Clustering
         public int ClustersNumber { get; private set; }
         public Cluster<T>[] Clusters { get; private set; }
 
-        Func<T, double[]> _featuresSelector;
+        Func<T, ArrayVector> _featuresSelector;
         List<ClusteringRecord<T>> _records = new List<ClusteringRecord<T>>();
 
-        public ClusteringModel(int clustersNumber, Func<T, double[]> featuresSelector)
+        public ClusteringModel(int clustersNumber, Func<T, ArrayVector> featuresSelector)
         {
             ClustersNumber = clustersNumber;
             _featuresSelector = featuresSelector;
@@ -105,7 +105,7 @@ namespace Bellona.Clustering
         public T Element { get; private set; }
         public ArrayVector Features { get; private set; }
 
-        public ClusteringRecord(T element, Func<T, double[]> featuresSelector)
+        public ClusteringRecord(T element, Func<T, ArrayVector> featuresSelector)
         {
             Element = element;
             Features = featuresSelector(element);

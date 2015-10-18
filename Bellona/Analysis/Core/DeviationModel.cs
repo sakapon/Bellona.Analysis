@@ -7,7 +7,7 @@ namespace Bellona.Core
 {
     public static class DeviationModel
     {
-        public static DeviationModel<T> Create<T>(IList<T> records, Func<T, double[]> featuresSelector)
+        public static DeviationModel<T> Create<T>(IList<T> records, Func<T, ArrayVector> featuresSelector)
         {
             return new DeviationModel<T>(records, featuresSelector);
         }
@@ -24,7 +24,7 @@ namespace Bellona.Core
         Lazy<double> _standardDeviation;
         public double StandardDeviation { get { return _standardDeviation.Value; } }
 
-        public DeviationModel(IList<T> records, Func<T, double[]> featuresSelector)
+        public DeviationModel(IList<T> records, Func<T, ArrayVector> featuresSelector)
         {
             Records = records.Select(r => new DeviationRecord<T>(this, r, featuresSelector)).ToArray();
 
@@ -46,7 +46,7 @@ namespace Bellona.Core
         Lazy<double> _standardScore;
         public double StandardScore { get { return _standardScore.Value; } }
 
-        public DeviationRecord(DeviationModel<T> model, T element, Func<T, double[]> featuresSelector)
+        public DeviationRecord(DeviationModel<T> model, T element, Func<T, ArrayVector> featuresSelector)
         {
             DeviationModel = model;
             Element = element;
