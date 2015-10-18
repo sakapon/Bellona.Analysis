@@ -13,7 +13,9 @@ namespace Bellona.Clustering
         public Cluster<T>[] Clusters { get; private set; }
 
         Func<T, ArrayVector> _featuresSelector;
+
         List<ClusteringRecord<T>> _records = new List<ClusteringRecord<T>>();
+        public ClusteringRecord<T>[] Records { get { return _records.ToArray(); } }
 
         public ClusteringModel(int clustersNumber, Func<T, ArrayVector> featuresSelector)
         {
@@ -29,7 +31,7 @@ namespace Bellona.Clustering
                 Clusters = InitializeClusters(ClustersNumber, _records);
 
             for (var i = 0; i < iterationsNumber; i++)
-                TrainOnce(Clusters, _records);
+                Clusters = TrainOnce(Clusters, _records);
         }
 
         public Cluster<T> AssignElement(T element)
@@ -40,30 +42,23 @@ namespace Bellona.Clustering
             return Clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, features));
         }
 
-        static Cluster<T>[] InitializeClusters(int clustersNumber, List<ClusteringRecord<T>> records)
+        static Cluster<T>[] InitializeClusters(int clustersNumber, IList<ClusteringRecord<T>> records)
         {
             return RandomHelper.ShuffleRange(records.Count)
                 .Select(i => records[i])
                 .Distinct(r => r.Features)
-                .Select((r, i) => new Cluster<T>(i, r.Features))
+                .Select((r, i) => new Cluster<T>(i, r.ToEnumerable()))
                 .Take(clustersNumber)
                 .ToArray();
         }
 
-        static void TrainOnce(Cluster<T>[] clusters, IEnumerable<ClusteringRecord<T>> records)
+        static Cluster<T>[] TrainOnce(Cluster<T>[] clusters, IEnumerable<ClusteringRecord<T>> records)
         {
-            Array.ForEach(clusters, c => c.Records.Clear());
-            AssignRecords(clusters, records);
-            Array.ForEach(clusters, c => c.TuneCentroid());
-        }
-
-        static void AssignRecords(Cluster<T>[] clusters, IEnumerable<ClusteringRecord<T>> records)
-        {
-            foreach (var record in records)
-            {
-                var cluster = clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, record.Features));
-                cluster.Records.Add(record);
-            }
+            return records
+                .GroupBy(r => clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, r.Features)))
+                .OrderBy(g => g.Key.Id)
+                .Select((g, i) => new Cluster<T>(i, g))
+                .ToArray();
         }
     }
 
@@ -71,31 +66,23 @@ namespace Bellona.Clustering
     public class Cluster<T>
     {
         public int Id { get; private set; }
-        public ArrayVector Centroid { get; private set; }
+        public ClusteringRecord<T>[] Records { get; private set; }
 
-        internal List<ClusteringRecord<T>> Records { get; private set; }
-        public T[] Elements { get { return Records.Select(r => r.Element).ToArray(); } }
+        public DeviationModel<ClusteringRecord<T>> DeviationInfo { get; private set; }
+        public ArrayVector Centroid { get { return DeviationInfo == null ? null : DeviationInfo.Mean; } }
 
-        public ArrayVector Mean { get { return Records.Count == 0 ? null : ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()); } }
-
-        public Cluster(int id, ArrayVector centroid)
+        public Cluster(int id, IEnumerable<ClusteringRecord<T>> records)
         {
             Id = id;
-            Centroid = centroid;
+            Records = records.ToArray();
 
-            Records = new List<ClusteringRecord<T>>();
-        }
-
-        internal void TuneCentroid()
-        {
-            if (Records.Count == 0) return;
-
-            Centroid = Mean;
+            if (Records.Length == 0) return;
+            DeviationInfo = DeviationModel.Create(Records, r => r.Features);
         }
 
         string ToDebugString()
         {
-            return string.Format("{0}: {1}: {2} records", Id, Centroid, Records.Count);
+            return string.Format("{0}: {1}: {2} records", Id, Centroid, Records.Length);
         }
     }
 

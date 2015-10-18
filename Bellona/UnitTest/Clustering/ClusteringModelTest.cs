@@ -18,7 +18,7 @@ namespace UnitTest.Clustering
 
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
-                .Execute(c => c.Elements.Execute(color => Console.WriteLine(color)));
+                .Execute(c => c.Records.Execute(r => Console.WriteLine(r.Element)));
         }
     }
 }
