@@ -10,7 +10,7 @@ namespace ColorsWpf
 {
     public class AppModel
     {
-        public ColorInfo[][] ColorClusters { get; private set; }
+        public ColorCluster[] ColorClusters { get; private set; }
 
         public AppModel()
         {
@@ -28,15 +28,24 @@ namespace ColorsWpf
                     .Select(r => new ColorInfo(r.Element))
                     .OrderBy(ci => ci.Color.GetHue())
                     .ToArray())
-                .OrderBy(cs => cs.Average(c => c.Color.GetHue()))
+                .Select((cs, i) => new ColorCluster { Id = i, Colors = cs })
+                .OrderBy(cc => cc.Colors.Average(c => c.Color.GetHue()))
                 .ToArray();
         }
+    }
+
+    public struct ColorCluster
+    {
+        public int Id { get; set; }
+        public ColorInfo[] Colors { get; set; }
     }
 
     [DebuggerDisplay(@"\{{Color}\}")]
     public class ColorInfo
     {
         public Color Color { get; private set; }
+
+        public string Name { get { return Color.Name; } }
         public string RGB { get { return string.Format("#{0:X2}{1:X2}{2:X2}", Color.R, Color.G, Color.B); } }
 
         public ColorInfo(Color color)
