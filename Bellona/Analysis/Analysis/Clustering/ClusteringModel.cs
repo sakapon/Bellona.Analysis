@@ -5,7 +5,7 @@ using System.Linq;
 using Bellona.Core;
 using Bellona.Linq;
 
-namespace Bellona.Clustering
+namespace Bellona.Analysis.Clustering
 {
     public class ClusteringModel<T>
     {

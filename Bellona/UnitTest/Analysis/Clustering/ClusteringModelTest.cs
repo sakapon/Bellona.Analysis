@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using Bellona.Clustering;
+using Bellona.Analysis.Clustering;
 using Bellona.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTest.Clustering
+namespace UnitTest.Analysis.Clustering
 {
     [TestClass]
     public class ClusteringModelTest
