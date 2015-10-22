@@ -13,7 +13,7 @@ namespace Bellona.Core
         }
     }
 
-    [DebuggerDisplay(@"\{Records: {Records.Length}\}")]
+    [DebuggerDisplay(@"\{Records={Records.Length}\}")]
     public class DeviationModel<T>
     {
         public DeviationRecord<T>[] Records { get; private set; }
@@ -59,9 +59,9 @@ namespace Bellona.Core
             _standardScore = new Lazy<double>(() => DeviationModel.StandardDeviation == 0 ? 0 : Deviation / DeviationModel.StandardDeviation);
         }
 
-        string ToDebugString()
+        internal string ToDebugString()
         {
-            return string.Format("{0}: {1}", Element, Features);
+            return string.Format("{0}: {1}", Element, Features.ToDebugString());
         }
     }
 }

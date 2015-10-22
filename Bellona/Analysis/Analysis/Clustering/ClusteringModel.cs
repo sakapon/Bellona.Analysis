@@ -150,9 +150,9 @@ namespace Bellona.Analysis.Clustering
             DeviationInfo = DeviationModel.Create(Records, r => r.Features);
         }
 
-        string ToDebugString()
+        internal string ToDebugString()
         {
-            return string.Format("{0}: {1}: {2} records", Id, Centroid, Records.Length);
+            return string.Format("{0}: {1}: {2} records", Id, Centroid.ToDebugString(), Records.Length);
         }
     }
 
@@ -168,9 +168,9 @@ namespace Bellona.Analysis.Clustering
             Features = featuresSelector(element);
         }
 
-        string ToDebugString()
+        internal string ToDebugString()
         {
-            return string.Format("{0}: {1}", Element, Features);
+            return string.Format("{0}: {1}", Element, Features.ToDebugString());
         }
     }
 }

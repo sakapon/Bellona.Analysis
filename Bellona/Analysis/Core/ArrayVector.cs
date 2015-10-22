@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Bellona.Core
 {
+    [DebuggerDisplay(@"\{{ToDebugString()}\}")]
     public class ArrayVector
     {
         public double[] Value { get; private set; }
@@ -49,6 +51,11 @@ namespace Bellona.Core
         }
 
         public override string ToString()
+        {
+            return string.Join(",", Value);
+        }
+
+        internal string ToDebugString()
         {
             return string.Join(", ", Value.Select(x => x.ToString("F3")));
         }
