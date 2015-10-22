@@ -44,7 +44,7 @@ namespace Bellona.Core
         public static T GetRandomElement<T>(this IList<T> source)
         {
             if (source == null) throw new ArgumentNullException("source");
-            if (source.Count == 0) throw new ArgumentException("The list must not be empty.", "source");
+            if (source.Count == 0) throw new ArgumentException("The source must not be empty.", "source");
 
             return source[_random.Next(source.Count)];
         }

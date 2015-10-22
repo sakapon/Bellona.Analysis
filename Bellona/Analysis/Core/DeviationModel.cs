@@ -24,12 +24,12 @@ namespace Bellona.Core
         Lazy<double> _standardDeviation;
         public double StandardDeviation { get { return _standardDeviation.Value; } }
 
-        public DeviationModel(IList<T> source, Func<T, ArrayVector> featuresSelector)
+        public DeviationModel(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
         {
             if (source == null) throw new ArgumentNullException("source");
-            if (source.Count == 0) throw new ArgumentException("The list must not be empty.", "source");
 
             Records = source.Select(e => new DeviationRecord<T>(this, e, featuresSelector)).ToArray();
+            if (Records.Length == 0) throw new ArgumentException("The source must not be empty.", "source");
 
             _mean = new Lazy<ArrayVector>(() => ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()));
             _standardDeviation = new Lazy<double>(() => Math.Sqrt(Records.Sum(r => r.Deviation * r.Deviation) / Records.Length));

@@ -73,7 +73,7 @@ namespace Bellona.Core
         public static ArrayVector GetAverage(IList<ArrayVector> vectors)
         {
             if (vectors == null) throw new ArgumentNullException("vectors");
-            if (vectors.Count == 0) throw new ArgumentException("The list must not be empty.", "vectors");
+            if (vectors.Count == 0) throw new ArgumentException("The source must not be empty.", "vectors");
 
             return Enumerable.Range(0, vectors[0].Dimension)
                 .Select(i => vectors.Average(v => v.Value[i]))
