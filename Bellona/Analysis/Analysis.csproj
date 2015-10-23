@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\Clustering\Cluster.cs" />
     <Compile Include="Analysis\Clustering\ClusteringModel.cs" />
     <Compile Include="Core\ArrayVector.cs" />
     <Compile Include="Core\DeviationModel.cs" />
