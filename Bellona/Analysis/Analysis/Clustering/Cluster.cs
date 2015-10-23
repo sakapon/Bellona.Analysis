@@ -36,10 +36,10 @@ namespace Bellona.Analysis.Clustering
         public T Element { get; private set; }
         public ArrayVector Features { get; private set; }
 
-        public ClusteringRecord(T element, Func<T, ArrayVector> featuresSelector)
+        public ClusteringRecord(T element, ArrayVector features)
         {
             Element = element;
-            Features = featuresSelector(element);
+            Features = features;
         }
 
         internal string ToDebugString()

@@ -27,7 +27,7 @@ namespace Bellona.Analysis.Clustering
 
         public void Train(IEnumerable<T> source, int? maxIterations = null)
         {
-            _records.AddRange(source.Select(e => new ClusteringRecord<T>(e, _featuresSelector)));
+            _records.AddRange(source.Select(e => new ClusteringRecord<T>(e, _featuresSelector(e))));
 
             if (ClustersNumber.HasValue)
                 TrainForFixedClustersNumber(maxIterations);
@@ -80,7 +80,7 @@ namespace Bellona.Analysis.Clustering
         {
             if (Clusters == null) throw new InvalidOperationException("This model is not trained.");
 
-            var record = new ClusteringRecord<T>(element, _featuresSelector);
+            var record = new ClusteringRecord<T>(element, _featuresSelector(element));
             return AssignRecord(Clusters, record);
         }
 

@@ -28,7 +28,7 @@ namespace Bellona.Core
         {
             if (source == null) throw new ArgumentNullException("source");
 
-            Records = source.Select(e => new DeviationRecord<T>(this, e, featuresSelector)).ToArray();
+            Records = source.Select(e => new DeviationRecord<T>(this, e, featuresSelector(e))).ToArray();
             if (Records.Length == 0) throw new ArgumentException("The source must not be empty.", "source");
 
             _mean = new Lazy<ArrayVector>(() => ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()));
@@ -49,11 +49,11 @@ namespace Bellona.Core
         Lazy<double> _standardScore;
         public double StandardScore { get { return _standardScore.Value; } }
 
-        public DeviationRecord(DeviationModel<T> model, T element, Func<T, ArrayVector> featuresSelector)
+        public DeviationRecord(DeviationModel<T> model, T element, ArrayVector features)
         {
             DeviationModel = model;
             Element = element;
-            Features = featuresSelector(element);
+            Features = features;
 
             _deviation = new Lazy<double>(() => ArrayVector.GetDistance(DeviationModel.Mean, Features));
             _standardScore = new Lazy<double>(() => DeviationModel.StandardDeviation == 0 ? 0 : Deviation / DeviationModel.StandardDeviation);
