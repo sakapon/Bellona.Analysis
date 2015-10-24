@@ -7,8 +7,11 @@ namespace Bellona.Core
 {
     public static class DeviationModel
     {
-        public static DeviationModel<T> Create<T>(IList<T> source, Func<T, ArrayVector> featuresSelector)
+        public static DeviationModel<T> Create<T>(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
         {
+            if (source == null) throw new ArgumentNullException("source");
+            if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
+
             return new DeviationModel<T>(source, featuresSelector);
         }
     }
@@ -17,6 +20,7 @@ namespace Bellona.Core
     public class DeviationModel<T>
     {
         public DeviationRecord<T>[] Records { get; private set; }
+        public bool HasRecords { get { return Records.Length > 0; } }
 
         Lazy<ArrayVector> _mean;
         public ArrayVector Mean { get { return _mean.Value; } }
@@ -24,14 +28,11 @@ namespace Bellona.Core
         Lazy<double> _standardDeviation;
         public double StandardDeviation { get { return _standardDeviation.Value; } }
 
-        public DeviationModel(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
+        internal DeviationModel(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
         {
-            if (source == null) throw new ArgumentNullException("source");
-
             Records = source.Select(e => new DeviationRecord<T>(this, e, featuresSelector(e))).ToArray();
-            if (Records.Length == 0) throw new ArgumentException("The source must not be empty.", "source");
 
-            _mean = new Lazy<ArrayVector>(() => ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()));
+            _mean = new Lazy<ArrayVector>(() => HasRecords ? ArrayVector.GetAverage(Records.Select(r => r.Features).ToArray()) : null);
             _standardDeviation = new Lazy<double>(() => Math.Sqrt(Records.Sum(r => r.Deviation * r.Deviation) / Records.Length));
         }
     }
@@ -49,14 +50,14 @@ namespace Bellona.Core
         Lazy<double> _standardScore;
         public double StandardScore { get { return _standardScore.Value; } }
 
-        public DeviationRecord(DeviationModel<T> model, T element, ArrayVector features)
+        internal DeviationRecord(DeviationModel<T> model, T element, ArrayVector features)
         {
             DeviationModel = model;
             Element = element;
             Features = features;
 
             _deviation = new Lazy<double>(() => ArrayVector.GetDistance(DeviationModel.Mean, Features));
-            _standardScore = new Lazy<double>(() => DeviationModel.StandardDeviation == 0 ? 0 : Deviation / DeviationModel.StandardDeviation);
+            _standardScore = new Lazy<double>(() => Deviation == 0.0 ? 0.0 : Deviation / DeviationModel.StandardDeviation);
         }
 
         internal string ToDebugString()

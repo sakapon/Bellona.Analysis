@@ -11,16 +11,16 @@ namespace Bellona.Analysis.Clustering
     {
         public int Id { get; private set; }
         public ClusteringRecord<T>[] Records { get; private set; }
+        public bool HasRecords { get { return Records.Length > 0; } }
 
         public DeviationModel<ClusteringRecord<T>> DeviationInfo { get; private set; }
-        public ArrayVector Centroid { get { return DeviationInfo == null ? null : DeviationInfo.Mean; } }
+        public ArrayVector Centroid { get { return DeviationInfo.Mean; } }
 
         public Cluster(int id, IEnumerable<ClusteringRecord<T>> records)
         {
             Id = id;
             Records = records.ToArray();
 
-            if (Records.Length == 0) return;
             DeviationInfo = DeviationModel.Create(Records, r => r.Features);
         }
 
