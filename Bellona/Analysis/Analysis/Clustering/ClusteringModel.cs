@@ -7,6 +7,7 @@ using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
+    [DebuggerDisplay(@"\{Records={Records.Length}\}")]
     public class ClusteringModel<T>
     {
         public int? ClustersNumber { get; private set; }

@@ -26,7 +26,7 @@ namespace Bellona.Analysis.Clustering
 
         internal string ToDebugString()
         {
-            return string.Format("{0}: {1}: {2} records", Id, Centroid.ToDebugString(), Records.Length);
+            return string.Format("Id={0}, Records={1}, Centroid={2}", Id, Records.Length, Centroid.ToDebugString());
         }
     }
 
