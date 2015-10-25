@@ -13,7 +13,7 @@ namespace Bellona.Analysis.Clustering
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
             if (clustersNumber <= 0) throw new ArgumentOutOfRangeException("clustersNumber", clustersNumber, "The value must be positive.");
 
-            return new ClusteringModelForNumber<T>(featuresSelector, clustersNumber, new Cluster<T>[0], new ClusteringRecord<T>[0]);
+            return new ClusteringModelForNumber<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], clustersNumber);
         }
 
         public static ClusteringModel2<T> CreateFromStandardScore<T>(Func<T, ArrayVector> featuresSelector, double maxStandardScore = 1.645)
@@ -53,7 +53,7 @@ namespace Bellona.Analysis.Clustering
     {
         public int ClustersNumber { get; private set; }
 
-        public ClusteringModelForNumber(Func<T, ArrayVector> featuresSelector, int clustersNumber, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
+        public ClusteringModelForNumber(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
             : base(featuresSelector, clusters, records)
         {
             ClustersNumber = clustersNumber;
@@ -69,7 +69,7 @@ namespace Bellona.Analysis.Clustering
             var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
             var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
 
-            return new ClusteringModelForNumber<T>(FeaturesSelector, ClustersNumber, clusters, records);
+            return new ClusteringModelForNumber<T>(FeaturesSelector, clusters, records, ClustersNumber);
         }
     }
 }
