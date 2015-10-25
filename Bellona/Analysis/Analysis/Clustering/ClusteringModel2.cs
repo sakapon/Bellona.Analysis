@@ -43,21 +43,13 @@ namespace Bellona.Analysis.Clustering
 
         public ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
-            if (Clusters.Length > 0)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                var records = source
-                    .Select(e => new ClusteringRecord<T>(e, _featuresSelector(e)))
-                    .ToArray();
+            var newRecords = source.Select(e => new ClusteringRecord<T>(e, _featuresSelector(e)));
+            var records = Records.Concat(newRecords).ToArray();
 
-                var initial = ClusteringHelper.InitializeClusters(ClustersNumber, records);
-                var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
+            var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
+            var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
 
-                return new ClusteringModel2<T>(_featuresSelector, ClustersNumber, clusters, records);
-            }
+            return new ClusteringModel2<T>(_featuresSelector, ClustersNumber, clusters, records);
         }
 
         public Cluster<T> Assign(T element)
