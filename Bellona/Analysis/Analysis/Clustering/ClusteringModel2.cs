@@ -20,7 +20,7 @@ namespace Bellona.Analysis.Clustering
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
 
-            throw new NotImplementedException();
+            return new ClusteringModelForStandardScore<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], maxStandardScore);
         }
     }
 
@@ -70,6 +70,22 @@ namespace Bellona.Analysis.Clustering
             var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
 
             return new ClusteringModelForNumber<T>(FeaturesSelector, clusters, records, ClustersNumber);
+        }
+    }
+
+    public class ClusteringModelForStandardScore<T> : ClusteringModel2<T>
+    {
+        public double MaxStandardScore { get; private set; }
+
+        public ClusteringModelForStandardScore(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, double maxStandardScore)
+            : base(featuresSelector, clusters, records)
+        {
+            MaxStandardScore = maxStandardScore;
+        }
+
+        public override ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }
