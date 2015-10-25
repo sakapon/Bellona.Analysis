@@ -26,6 +26,11 @@ namespace Bellona.Linq
                 yield return element;
         }
 
+        public static IEnumerable<TResult> Repeat<TResult>(TResult element, int? count)
+        {
+            return count.HasValue ? Enumerable.Repeat(element, count.Value) : Repeat(element);
+        }
+
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null) throw new ArgumentNullException("source");
