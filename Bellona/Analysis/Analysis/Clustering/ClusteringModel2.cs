@@ -43,6 +43,8 @@ namespace Bellona.Analysis.Clustering
 
         public ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
+            if (source == null) throw new ArgumentNullException("source");
+
             var newRecords = source.Select(e => new ClusteringRecord<T>(e, _featuresSelector(e)));
             var records = Records.Concat(newRecords).ToArray();
 
