@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bellona.Core;
-using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
@@ -44,7 +43,21 @@ namespace Bellona.Analysis.Clustering
 
         public ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
-            throw new NotImplementedException();
+            if (Clusters.Length > 0)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                var records = source
+                    .Select(e => new ClusteringRecord<T>(e, _featuresSelector(e)))
+                    .ToArray();
+
+                var initial = ClusteringHelper.InitializeClusters(ClustersNumber, records);
+                var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
+
+                return new ClusteringModel2<T>(_featuresSelector, ClustersNumber, clusters, records);
+            }
         }
 
         public Cluster<T> Assign(T element)
@@ -52,19 +65,6 @@ namespace Bellona.Analysis.Clustering
             if (Clusters.Length == 0) throw new InvalidOperationException("This model is not trained.");
 
             return ClusteringHelper.AssignFeatures(Clusters, _featuresSelector(element));
-        }
-    }
-
-    public static class ClusteringHelper
-    {
-        public static Cluster<T> AssignFeatures<T>(Cluster<T>[] clusters, ArrayVector features)
-        {
-            return clusters.FirstToMin(c => ArrayVector.GetDistance(c.Centroid, features));
-        }
-
-        public static Cluster<T> AssignRecord<T>(Cluster<T>[] clusters, ClusteringRecord<T> record)
-        {
-            return AssignFeatures(clusters, record.Features);
         }
     }
 }

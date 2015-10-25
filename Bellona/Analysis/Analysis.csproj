@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\Clustering\Cluster.cs" />
+    <Compile Include="Analysis\Clustering\ClusteringHelper.cs" />
     <Compile Include="Analysis\Clustering\ClusteringModel.cs" />
     <Compile Include="Analysis\Clustering\ClusteringModel2.cs" />
     <Compile Include="Core\ArrayVector.cs" />
