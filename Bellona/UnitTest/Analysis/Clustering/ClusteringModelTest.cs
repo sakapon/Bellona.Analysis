@@ -13,7 +13,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_1()
         {
-            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var model = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
             model.Train(TestData.GetColors());
             DisplayResultForColors(model);
 
@@ -24,7 +24,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_2()
         {
-            var model = ClusteringModel2.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 10);
+            var model = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 10);
             model.Train(TestData.GetColors());
             DisplayResultForColors(model);
         }
@@ -32,7 +32,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_3()
         {
-            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var model = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
             model.Train(TestData.GetColors(), maxStandardScore: 1.5);
             DisplayResultForColors(model);
         }
@@ -40,12 +40,12 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_4()
         {
-            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var model = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
             model.Train(TestData.GetColors(), 2);
             DisplayResultForColors(model);
         }
 
-        void DisplayResultForColors(ClusteringModel2<Color> model)
+        void DisplayResultForColors(ClusteringModelBase<Color> model)
         {
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))

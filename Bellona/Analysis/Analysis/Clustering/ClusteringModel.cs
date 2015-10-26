@@ -7,7 +7,7 @@ using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
-    public static class ClusteringModel2
+    public static class ClusteringModel
     {
         public static ClusteringModelForNumber<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
@@ -26,14 +26,14 @@ namespace Bellona.Analysis.Clustering
     }
 
     [DebuggerDisplay(@"\{Clusters={Clusters.Length}, Records={Records.Length}\}")]
-    public abstract class ClusteringModel2<T>
+    public abstract class ClusteringModelBase<T>
     {
         protected Func<T, ArrayVector> FeaturesSelector { get; private set; }
 
         public Cluster<T>[] Clusters { get; private set; }
         public ClusteringRecord<T>[] Records { get; private set; }
 
-        protected ClusteringModel2(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
+        protected ClusteringModelBase(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
         {
             FeaturesSelector = featuresSelector;
             Clusters = clusters;
@@ -48,7 +48,7 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
-    public class ClusteringModelForNumber<T> : ClusteringModel2<T>
+    public class ClusteringModelForNumber<T> : ClusteringModelBase<T>
     {
         public int ClustersNumber { get; private set; }
 
@@ -73,7 +73,7 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
-    public class ClusteringModelForStandardScore<T> : ClusteringModel2<T>
+    public class ClusteringModelForStandardScore<T> : ClusteringModelBase<T>
     {
         public ClusteringModelForStandardScore(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
             : base(featuresSelector, clusters, records)
