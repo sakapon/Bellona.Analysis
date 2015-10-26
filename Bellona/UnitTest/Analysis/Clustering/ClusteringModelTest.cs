@@ -13,7 +13,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_1()
         {
-            var empty = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors());
             DisplayResultForColors(model);
 
@@ -32,7 +32,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_3()
         {
-            var empty = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors(), maxStandardScore: 1.5);
             DisplayResultForColors(model);
         }
@@ -40,7 +40,7 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_4()
         {
-            var empty = ClusteringModel.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors(), 2);
             DisplayResultForColors(model);
         }

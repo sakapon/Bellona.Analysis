@@ -9,19 +9,19 @@ namespace Bellona.Analysis.Clustering
 {
     public static class ClusteringModel
     {
-        public static ClusteringModelForNumber<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
+        public static ClusteringModel<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
             if (clustersNumber <= 0) throw new ArgumentOutOfRangeException("clustersNumber", clustersNumber, "The value must be positive.");
 
-            return new ClusteringModelForNumber<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], clustersNumber);
+            return new ClusteringModel<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], clustersNumber);
         }
 
-        public static ClusteringModelForStandardScore<T> CreateFromStandardScore<T>(Func<T, ArrayVector> featuresSelector)
+        public static AutoClusteringModel<T> CreateAuto<T>(Func<T, ArrayVector> featuresSelector)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
 
-            return new ClusteringModelForStandardScore<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0]);
+            return new AutoClusteringModel<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0]);
         }
     }
 
@@ -48,17 +48,17 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
-    public class ClusteringModelForNumber<T> : ClusteringModelBase<T>
+    public class ClusteringModel<T> : ClusteringModelBase<T>
     {
         public int ClustersNumber { get; private set; }
 
-        public ClusteringModelForNumber(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
+        public ClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
             : base(featuresSelector, clusters, records)
         {
             ClustersNumber = clustersNumber;
         }
 
-        public ClusteringModelForNumber<T> Train(IEnumerable<T> source, int? maxIterations = null)
+        public ClusteringModel<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
             if (source == null) throw new ArgumentNullException("source");
 
@@ -69,18 +69,18 @@ namespace Bellona.Analysis.Clustering
             var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
             var clusters = ClusteringHelper.TrainForNumber(initial, records, maxIterations);
 
-            return new ClusteringModelForNumber<T>(FeaturesSelector, clusters, records, ClustersNumber);
+            return new ClusteringModel<T>(FeaturesSelector, clusters, records, ClustersNumber);
         }
     }
 
-    public class ClusteringModelForStandardScore<T> : ClusteringModelBase<T>
+    public class AutoClusteringModel<T> : ClusteringModelBase<T>
     {
-        public ClusteringModelForStandardScore(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
+        public AutoClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
             : base(featuresSelector, clusters, records)
         {
         }
 
-        public ClusteringModelForStandardScore<T> Train(IEnumerable<T> source, int? maxClustersNumber = null, double maxStandardScore = 1.645)
+        public AutoClusteringModel<T> Train(IEnumerable<T> source, int? maxClustersNumber = null, double maxStandardScore = 1.645)
         {
             if (source == null) throw new ArgumentNullException("source");
 
@@ -91,7 +91,7 @@ namespace Bellona.Analysis.Clustering
             var initial = Clusters.Length > 0 ? Clusters : new Cluster<T>(0, records.Take(1)).MakeArray();
             var clusters = ClusteringHelper.TrainForStandardScore(initial, records, maxClustersNumber, maxStandardScore);
 
-            return new ClusteringModelForStandardScore<T>(FeaturesSelector, clusters, records);
+            return new AutoClusteringModel<T>(FeaturesSelector, clusters, records);
         }
     }
 }
