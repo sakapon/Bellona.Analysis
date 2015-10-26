@@ -42,7 +42,7 @@ namespace Bellona.Analysis.Clustering
             return current;
         }
 
-        public static Cluster<T>[] TrainForStandardScore<T>(Cluster<T>[] clusters, IList<ClusteringRecord<T>> records, int? maxClustersNumber, double maxStandardScore)
+        public static Cluster<T>[] TrainForAuto<T>(Cluster<T>[] clusters, IList<ClusteringRecord<T>> records, int? maxClustersNumber, double maxStandardScore)
         {
             var maxClustersNumber2 = maxClustersNumber.HasValue ? Math.Min(maxClustersNumber.Value, records.Count) : records.Count;
             var current = clusters;

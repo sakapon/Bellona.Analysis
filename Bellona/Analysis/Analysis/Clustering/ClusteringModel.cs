@@ -52,7 +52,7 @@ namespace Bellona.Analysis.Clustering
     {
         public int ClustersNumber { get; private set; }
 
-        public ClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
+        internal ClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
             : base(featuresSelector, clusters, records)
         {
             ClustersNumber = clustersNumber;
@@ -75,7 +75,7 @@ namespace Bellona.Analysis.Clustering
 
     public class AutoClusteringModel<T> : ClusteringModelBase<T>
     {
-        public AutoClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
+        internal AutoClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
             : base(featuresSelector, clusters, records)
         {
         }
@@ -89,7 +89,7 @@ namespace Bellona.Analysis.Clustering
             if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
             var initial = Clusters.Length > 0 ? Clusters : new Cluster<T>(0, records.Take(1)).MakeArray();
-            var clusters = ClusteringHelper.TrainForStandardScore(initial, records, maxClustersNumber, maxStandardScore);
+            var clusters = ClusteringHelper.TrainForAuto(initial, records, maxClustersNumber, maxStandardScore);
 
             return new AutoClusteringModel<T>(FeaturesSelector, clusters, records);
         }
