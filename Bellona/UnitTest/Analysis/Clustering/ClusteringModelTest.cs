@@ -33,7 +33,7 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
-        public void Test_1()
+        public void CreateAuto_1()
         {
             var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors());
@@ -44,7 +44,15 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
-        public void Test_3()
+        public void CreateAuto_2()
+        {
+            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
+            var model = empty.Train(TestData.GetColors(), 2);
+            DisplayResultForColors(model);
+        }
+
+        [TestMethod]
+        public void CreateAuto_3()
         {
             var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors(), maxStandardScore: 1.5);
@@ -52,10 +60,10 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
-        public void Test_4()
+        public void CreateAuto_9()
         {
-            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
-            var model = empty.Train(TestData.GetColors(), 2);
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.GetSaturation(), c.GetBrightness() })
+                .Train(TestData.GetColors());
             DisplayResultForColors(model);
         }
 
