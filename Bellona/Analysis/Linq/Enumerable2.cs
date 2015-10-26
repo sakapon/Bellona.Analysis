@@ -15,9 +15,20 @@ namespace Bellona.Linq
         /// <typeparam name="TResult">The type of the object.</typeparam>
         /// <param name="element">An object.</param>
         /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the input object.</returns>
-        public static IEnumerable<TResult> ToEnumerable<TResult>(this TResult element)
+        public static IEnumerable<TResult> MakeEnumerable<TResult>(this TResult element)
         {
             yield return element;
+        }
+
+        /// <summary>
+        /// Creates an array from a single object.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the object.</typeparam>
+        /// <param name="element">An object.</param>
+        /// <returns>An array that contains the input object.</returns>
+        public static TResult[] MakeArray<TResult>(this TResult element)
+        {
+            return new[] { element };
         }
 
         public static IEnumerable<TResult> Repeat<TResult>(TResult element)

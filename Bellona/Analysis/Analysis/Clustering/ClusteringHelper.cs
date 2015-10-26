@@ -13,7 +13,7 @@ namespace Bellona.Analysis.Clustering
             return RandomHelper.ShuffleRange(records.Count)
                 .Select(i => records[i])
                 .Distinct(r => r.Features)
-                .Select((r, i) => new Cluster<T>(i, r.ToEnumerable()))
+                .Select((r, i) => new Cluster<T>(i, r.MakeEnumerable()))
                 .Take(clustersNumber)
                 .ToArray();
         }
@@ -91,9 +91,9 @@ namespace Bellona.Analysis.Clustering
         public static Cluster<T>[] SeparateClusters<T>(Cluster<T>[] clusters, ClusteringRecord<T> recordForNewCluster)
         {
             return clusters
-                .Select(c => new Cluster<T>(c.Id, c.Records.Except(recordForNewCluster.ToEnumerable())))
+                .Select(c => new Cluster<T>(c.Id, c.Records.Where(r => r != recordForNewCluster)))
                 .Where(c => c.HasRecords)
-                .Concat(new Cluster<T>(clusters.Length, recordForNewCluster.ToEnumerable()).ToEnumerable())
+                .Concat(new Cluster<T>(clusters.Length, recordForNewCluster.MakeEnumerable()).MakeEnumerable())
                 .ToArray();
         }
 

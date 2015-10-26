@@ -57,8 +57,8 @@ namespace Bellona.Analysis.Clustering
 
             for (var i = Clusters.Length; i < _records.Count; i++)
             {
-                var newCluster = new Cluster<T>(i, farthestRecord.Element.ToEnumerable());
-                Clusters = Clusters.Concat(newCluster.ToEnumerable()).ToArray();
+                var newCluster = new Cluster<T>(i, farthestRecord.Element.MakeEnumerable());
+                Clusters = Clusters.Concat(newCluster.MakeEnumerable()).ToArray();
                 TrainIteratively(maxIterations);
                 farthestRecord = GetFarthestRecord(Clusters);
                 if (farthestRecord.StandardScore <= MaxStandardScore) break;
@@ -90,7 +90,7 @@ namespace Bellona.Analysis.Clustering
             return RandomHelper.ShuffleRange(records.Count)
                 .Select(i => records[i])
                 .Distinct(r => r.Features)
-                .Select((r, i) => new Cluster<T>(i, r.ToEnumerable()))
+                .Select((r, i) => new Cluster<T>(i, r.MakeEnumerable()))
                 .Take(clustersNumber)
                 .ToArray();
         }

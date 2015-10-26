@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bellona.Core;
+using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
@@ -92,7 +93,7 @@ namespace Bellona.Analysis.Clustering
             var records = Records.Concat(newRecords).ToArray();
             if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
-            var initial = Clusters.Length > 0 ? Clusters : new[] { new Cluster<T>(0, records.Take(1)) };
+            var initial = Clusters.Length > 0 ? Clusters : new Cluster<T>(0, records.Take(1)).MakeArray();
             var clusters = ClusteringHelper.TrainForStandardScore(initial, records, null, MaxStandardScore);
 
             return new ClusteringModelForStandardScore<T>(FeaturesSelector, clusters, records, MaxStandardScore);

@@ -23,7 +23,7 @@ namespace UnitTest.Core
         public void Test_1()
         {
             var sample = new SamplePoint { Id = 1, Point = new[] { 2.0, 3.0 } };
-            var model = DeviationModel.Create(sample.ToEnumerable(), d => d.Point);
+            var model = DeviationModel.Create(sample.MakeEnumerable(), d => d.Point);
 
             Assert.AreEqual(true, model.HasRecords);
             Assert.AreEqual(sample.Point, model.Mean);
