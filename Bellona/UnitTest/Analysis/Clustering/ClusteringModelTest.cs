@@ -13,18 +13,18 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_1()
         {
-            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B });
+            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
             model.Train(TestData.GetColors());
             DisplayResultForColors(model);
 
-            var cluster = model.AssignElement(Color.FromArgb(0, 92, 175)); // Ruri
+            var cluster = model.Assign(Color.FromArgb(0, 92, 175)); // Ruri
             Console.WriteLine("Ruri: Cluster {0}", cluster.Id);
         }
 
         [TestMethod]
         public void Test_2()
         {
-            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B }, 10);
+            var model = ClusteringModel2.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 10);
             model.Train(TestData.GetColors());
             DisplayResultForColors(model);
         }
@@ -32,20 +32,20 @@ namespace UnitTest.Analysis.Clustering
         [TestMethod]
         public void Test_3()
         {
-            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B }, maxStandardScore: 1.2);
-            model.Train(TestData.GetColors());
+            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            model.Train(TestData.GetColors(), maxStandardScore: 1.5);
             DisplayResultForColors(model);
         }
 
         [TestMethod]
         public void Test_4()
         {
-            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B });
-            model.Train(TestData.GetColors(), 3);
+            var model = ClusteringModel2.CreateFromStandardScore<Color>(c => new double[] { c.R, c.G, c.B });
+            model.Train(TestData.GetColors(), 2);
             DisplayResultForColors(model);
         }
 
-        void DisplayResultForColors(ClusteringModel<Color> model)
+        void DisplayResultForColors(ClusteringModel2<Color> model)
         {
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
