@@ -9,7 +9,7 @@ namespace Bellona.Analysis.Clustering
 {
     public static class ClusteringModel2
     {
-        public static ClusteringModel2<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
+        public static ClusteringModelForNumber<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
             if (clustersNumber <= 0) throw new ArgumentOutOfRangeException("clustersNumber", clustersNumber, "The value must be positive.");
@@ -17,11 +17,11 @@ namespace Bellona.Analysis.Clustering
             return new ClusteringModelForNumber<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], clustersNumber);
         }
 
-        public static ClusteringModel2<T> CreateFromStandardScore<T>(Func<T, ArrayVector> featuresSelector, double maxStandardScore = 1.645)
+        public static ClusteringModelForStandardScore<T> CreateFromStandardScore<T>(Func<T, ArrayVector> featuresSelector)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
 
-            return new ClusteringModelForStandardScore<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], maxStandardScore);
+            return new ClusteringModelForStandardScore<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0]);
         }
     }
 
@@ -39,8 +39,6 @@ namespace Bellona.Analysis.Clustering
             Clusters = clusters;
             Records = records;
         }
-
-        public abstract ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null);
 
         public Cluster<T> Assign(T element)
         {
@@ -60,7 +58,7 @@ namespace Bellona.Analysis.Clustering
             ClustersNumber = clustersNumber;
         }
 
-        public override ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
+        public ClusteringModelForNumber<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
             if (source == null) throw new ArgumentNullException("source");
 
@@ -77,15 +75,12 @@ namespace Bellona.Analysis.Clustering
 
     public class ClusteringModelForStandardScore<T> : ClusteringModel2<T>
     {
-        public double MaxStandardScore { get; private set; }
-
-        public ClusteringModelForStandardScore(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, double maxStandardScore)
+        public ClusteringModelForStandardScore(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
             : base(featuresSelector, clusters, records)
         {
-            MaxStandardScore = maxStandardScore;
         }
 
-        public override ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
+        public ClusteringModelForStandardScore<T> Train(IEnumerable<T> source, int? maxClustersNumber = null, double maxStandardScore = 1.645)
         {
             if (source == null) throw new ArgumentNullException("source");
 
@@ -94,9 +89,9 @@ namespace Bellona.Analysis.Clustering
             if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
             var initial = Clusters.Length > 0 ? Clusters : new Cluster<T>(0, records.Take(1)).MakeArray();
-            var clusters = ClusteringHelper.TrainForStandardScore(initial, records, null, MaxStandardScore);
+            var clusters = ClusteringHelper.TrainForStandardScore(initial, records, maxClustersNumber, maxStandardScore);
 
-            return new ClusteringModelForStandardScore<T>(FeaturesSelector, clusters, records, MaxStandardScore);
+            return new ClusteringModelForStandardScore<T>(FeaturesSelector, clusters, records);
         }
     }
 }
