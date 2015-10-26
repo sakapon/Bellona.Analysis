@@ -11,9 +11,9 @@ namespace UnitTest.Analysis.Clustering
     public class ClusteringModelTest
     {
         [TestMethod]
-        public void Test_1()
+        public void CreateFromNumber_1()
         {
-            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
+            var empty = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 12);
             var model = empty.Train(TestData.GetColors());
             DisplayResultForColors(model);
 
@@ -22,11 +22,25 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
-        public void Test_2()
+        public void CreateFromNumber_2()
         {
-            var empty = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 12);
+            var initialColors = new[] { Color.Red, Color.OrangeRed, Color.DarkOrange, Color.Orange, Color.Gold, Color.Yellow, Color.Chartreuse, Color.Lime, Color.SpringGreen, Color.Cyan, Color.DeepSkyBlue, Color.Blue, Color.Magenta };
+
+            var empty = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, initialColors.Length);
+            var initial = empty.Train(initialColors);
+            var model = initial.Train(TestData.GetColors().Except(initialColors));
+            DisplayResultForColors(model);
+        }
+
+        [TestMethod]
+        public void Test_1()
+        {
+            var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
             var model = empty.Train(TestData.GetColors());
             DisplayResultForColors(model);
+
+            var cluster = model.Assign(Color.FromArgb(0, 92, 175)); // Ruri
+            Console.WriteLine("Ruri: Cluster {0}", cluster.Id);
         }
 
         [TestMethod]
