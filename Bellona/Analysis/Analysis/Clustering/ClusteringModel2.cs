@@ -65,6 +65,7 @@ namespace Bellona.Analysis.Clustering
 
             var newRecords = source.Select(e => new ClusteringRecord<T>(e, FeaturesSelector(e)));
             var records = Records.Concat(newRecords).ToArray();
+            if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
             var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
             var clusters = ClusteringHelper.TrainForNumber(initial, records, maxIterations);
@@ -89,6 +90,7 @@ namespace Bellona.Analysis.Clustering
 
             var newRecords = source.Select(e => new ClusteringRecord<T>(e, FeaturesSelector(e)));
             var records = Records.Concat(newRecords).ToArray();
+            if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
             var initial = Clusters.Length > 0 ? Clusters : new[] { new Cluster<T>(0, records.Take(1)) };
             var clusters = ClusteringHelper.TrainForStandardScore(initial, records, null, MaxStandardScore);
