@@ -31,10 +31,13 @@ namespace Bellona.Analysis.Clustering
         {
             var current = clusters;
 
-            Enumerable2.Repeat(true, maxIterations)
-                .Select(_ => TrainOnce(current, records))
-                .TakeWhile(cs => !ClustersEquals(current, cs))
-                .Execute(cs => current = cs);
+            foreach (var _ in Enumerable2.Repeat(true, maxIterations))
+            {
+                var cs = TrainOnce(current, records);
+                if (ClustersEquals(current, cs)) return current;
+
+                current = cs;
+            }
 
             return current;
         }
@@ -44,14 +47,16 @@ namespace Bellona.Analysis.Clustering
             var maxClustersNumber2 = maxClustersNumber.HasValue ? Math.Min(maxClustersNumber.Value, records.Count) : records.Count;
             var current = clusters;
 
-            Enumerable2.Repeat(true)
-                .Do(_ => current = TrainForNumber(current, records, null))
-                .TakeWhile(_ => current.Length < maxClustersNumber2)
-                .Select(_ => SeparateClustersIfLoose(current, maxStandardScore))
-                .TakeWhile(cs => current != cs)
-                .Execute(cs => current = cs);
+            while (true)
+            {
+                current = TrainForNumber(current, records, null);
+                if (current.Length >= maxClustersNumber2) return current;
 
-            return current;
+                var farthestRecord = GetFarthestRecord(current);
+                if (farthestRecord.StandardScore <= maxStandardScore) return current;
+
+                current = SeparateClusters(current, farthestRecord.Element);
+            }
         }
 
         public static Cluster<T> AssignFeatures<T>(Cluster<T>[] clusters, ArrayVector features)
@@ -78,14 +83,6 @@ namespace Bellona.Analysis.Clustering
 
             return Enumerable.Range(0, cluster1.Records.Length)
                 .All(i => cluster1.Records[i] == cluster2.Records[i]);
-        }
-
-        public static Cluster<T>[] SeparateClustersIfLoose<T>(Cluster<T>[] clusters, double maxStandardScore)
-        {
-            var farthestRecord = GetFarthestRecord(clusters);
-            return farthestRecord.StandardScore <= maxStandardScore
-                ? clusters
-                : SeparateClusters(clusters, farthestRecord.Element);
         }
 
         public static Cluster<T>[] SeparateClusters<T>(Cluster<T>[] clusters, ClusteringRecord<T> recordForNewCluster)
