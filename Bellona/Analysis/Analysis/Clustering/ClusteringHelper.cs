@@ -27,13 +27,28 @@ namespace Bellona.Analysis.Clustering
                 .ToArray();
         }
 
-        public static Cluster<T>[] TrainIteratively<T>(Cluster<T>[] clusters, IList<ClusteringRecord<T>> records, int? maxIterations)
+        public static Cluster<T>[] TrainForNumber<T>(Cluster<T>[] clusters, IList<ClusteringRecord<T>> records, int? maxIterations)
         {
             var current = clusters;
 
             Enumerable2.Repeat(true, maxIterations)
                 .Select(_ => TrainOnce(current, records))
                 .TakeWhile(cs => !ClustersEquals(current, cs))
+                .Execute(cs => current = cs);
+
+            return current;
+        }
+
+        public static Cluster<T>[] TrainForStandardScore<T>(Cluster<T>[] clusters, IList<ClusteringRecord<T>> records, int? maxClustersNumber, double maxStandardScore)
+        {
+            var maxClustersNumber2 = maxClustersNumber.HasValue ? Math.Min(maxClustersNumber.Value, records.Count) : records.Count;
+            var current = clusters;
+
+            Enumerable2.Repeat(true)
+                .Do(_ => current = TrainForNumber(current, records, null))
+                .TakeWhile(_ => current.Length < maxClustersNumber2)
+                .Select(_ => SeparateClustersIfLoose(current, maxStandardScore))
+                .TakeWhile(cs => current != cs)
                 .Execute(cs => current = cs);
 
             return current;
@@ -63,6 +78,30 @@ namespace Bellona.Analysis.Clustering
 
             return Enumerable.Range(0, cluster1.Records.Length)
                 .All(i => cluster1.Records[i] == cluster2.Records[i]);
+        }
+
+        public static Cluster<T>[] SeparateClustersIfLoose<T>(Cluster<T>[] clusters, double maxStandardScore)
+        {
+            var farthestRecord = GetFarthestRecord(clusters);
+            return farthestRecord.StandardScore <= maxStandardScore
+                ? clusters
+                : SeparateClusters(clusters, farthestRecord.Element);
+        }
+
+        public static Cluster<T>[] SeparateClusters<T>(Cluster<T>[] clusters, ClusteringRecord<T> recordForNewCluster)
+        {
+            return clusters
+                .Select(c => new Cluster<T>(c.Id, c.Records.Except(recordForNewCluster.ToEnumerable())))
+                .Where(c => c.HasRecords)
+                .Concat(new Cluster<T>(clusters.Length, recordForNewCluster.ToEnumerable()).ToEnumerable())
+                .ToArray();
+        }
+
+        public static DeviationRecord<ClusteringRecord<T>> GetFarthestRecord<T>(Cluster<T>[] clusters)
+        {
+            return clusters
+                .SelectMany(c => c.DeviationInfo.Records)
+                .FirstToMax(r => r.StandardScore);
         }
     }
 }

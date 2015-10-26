@@ -67,7 +67,7 @@ namespace Bellona.Analysis.Clustering
             var records = Records.Concat(newRecords).ToArray();
 
             var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
-            var clusters = ClusteringHelper.TrainIteratively(initial, records, maxIterations);
+            var clusters = ClusteringHelper.TrainForNumber(initial, records, maxIterations);
 
             return new ClusteringModelForNumber<T>(FeaturesSelector, clusters, records, ClustersNumber);
         }
@@ -85,7 +85,15 @@ namespace Bellona.Analysis.Clustering
 
         public override ClusteringModel2<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
-            throw new NotImplementedException();
+            if (source == null) throw new ArgumentNullException("source");
+
+            var newRecords = source.Select(e => new ClusteringRecord<T>(e, FeaturesSelector(e)));
+            var records = Records.Concat(newRecords).ToArray();
+
+            var initial = Clusters.Length > 0 ? Clusters : new[] { new Cluster<T>(0, records.Take(1)) };
+            var clusters = ClusteringHelper.TrainForStandardScore(initial, records, null, MaxStandardScore);
+
+            return new ClusteringModelForStandardScore<T>(FeaturesSelector, clusters, records, MaxStandardScore);
         }
     }
 }
