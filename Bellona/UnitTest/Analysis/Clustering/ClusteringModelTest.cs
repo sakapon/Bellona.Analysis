@@ -103,7 +103,7 @@ namespace UnitTest.Analysis.Clustering
         {
             var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
                 .Train(TestData.GetColors())
-                .ToSimpleArray(v => v.Norm);
+                .ToSimpleArray(c => c.GetHue());
             DisplayResultForColors(model);
         }
 

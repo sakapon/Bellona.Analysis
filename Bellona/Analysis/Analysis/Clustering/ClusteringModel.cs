@@ -49,17 +49,21 @@ namespace Bellona.Analysis.Clustering
 
         public T[][] ToSimpleArray()
         {
-            return ToSimpleArray(v => v.Value[0]);
+            return Clusters
+                .Select(c => c.Records
+                    .Select(r => r.Element)
+                    .ToArray())
+                .ToArray();
         }
 
-        public T[][] ToSimpleArray(Func<ArrayVector, double> sortKeySelector)
+        public T[][] ToSimpleArray(Func<T, double> sortKeySelector)
         {
             if (sortKeySelector == null) throw new ArgumentNullException("sortKeySelector");
 
             return Clusters
-                .OrderBy(c => sortKeySelector(c.Centroid))
+                .OrderBy(c => c.Records.Average(r => sortKeySelector(r.Element)))
                 .Select(c => c.Records
-                    .OrderBy(r => sortKeySelector(r.Features))
+                    .OrderBy(r => sortKeySelector(r.Element))
                     .Select(r => r.Element)
                     .ToArray())
                 .ToArray();
