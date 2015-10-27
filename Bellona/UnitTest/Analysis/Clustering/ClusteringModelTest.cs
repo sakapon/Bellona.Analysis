@@ -98,6 +98,15 @@ namespace UnitTest.Analysis.Clustering
             DisplayResultForColors(model);
         }
 
+        [TestMethod]
+        public void ToSimpleArray_2()
+        {
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+                .Train(TestData.GetColors())
+                .ToSimpleArray(v => v.Norm);
+            DisplayResultForColors(model);
+        }
+
         void DisplayResultForColors(ClusteringModelBase<Color> model)
         {
             model.Clusters
