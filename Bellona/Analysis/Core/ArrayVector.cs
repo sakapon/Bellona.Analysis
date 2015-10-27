@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Bellona.Core
 {
+    [DebuggerDisplay(@"\{{ToDebugString()}\}")]
     public class ArrayVector
     {
         public double[] Value { get; private set; }
@@ -50,6 +52,11 @@ namespace Bellona.Core
 
         public override string ToString()
         {
+            return string.Join(",", Value);
+        }
+
+        internal string ToDebugString()
+        {
             return string.Join(", ", Value.Select(x => x.ToString("F3")));
         }
 
@@ -66,7 +73,7 @@ namespace Bellona.Core
         public static ArrayVector GetAverage(IList<ArrayVector> vectors)
         {
             if (vectors == null) throw new ArgumentNullException("vectors");
-            if (vectors.Count == 0) throw new ArgumentException("The list must not be empty.", "vectors");
+            if (vectors.Count == 0) throw new ArgumentException("The source must not be empty.", "vectors");
 
             return Enumerable.Range(0, vectors[0].Dimension)
                 .Select(i => vectors.Average(v => v.Value[i]))

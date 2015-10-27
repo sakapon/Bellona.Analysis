@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using Bellona.Clustering;
+using Bellona.Analysis.Clustering;
 
 namespace ColorsWpf
 {
@@ -20,8 +20,8 @@ namespace ColorsWpf
                 .Where(c => c.A == 255) // Exclude Transparent.
                 .ToArray();
 
-            var model = new ClusteringModel<Color>(c => new double[] { c.R, c.G, c.B });
-            model.Train(colors);
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+                .Train(colors);
 
             ColorClusters = model.Clusters
                 .Select(c => c.Records
