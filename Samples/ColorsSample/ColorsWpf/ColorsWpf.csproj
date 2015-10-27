@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bellona.Analysis, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bellona.Analysis.1.0.5\lib\net45\Bellona.Analysis.dll</HintPath>
+    <Reference Include="Bellona.Analysis, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bellona.Analysis.1.0.9\lib\net45\Bellona.Analysis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
