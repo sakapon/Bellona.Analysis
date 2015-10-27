@@ -7,8 +7,18 @@ using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
+    /// <summary>
+    /// Provides a set of methods to start clustering.
+    /// </summary>
     public static class ClusteringModel
     {
+        /// <summary>
+        /// Initializes a clustering model with the specified number of clusters.
+        /// </summary>
+        /// <typeparam name="T">The type of target data.</typeparam>
+        /// <param name="featuresSelector">A function to get the features from each element.</param>
+        /// <param name="clustersNumber">The number of clusters.</param>
+        /// <returns>An empty clustering model in which the number of clusters is fixed.</returns>
         public static ClusteringModel<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
@@ -17,6 +27,12 @@ namespace Bellona.Analysis.Clustering
             return new ClusteringModel<T>(featuresSelector, new Cluster<T>[0], new ClusteringRecord<T>[0], clustersNumber);
         }
 
+        /// <summary>
+        /// Initializes a clustering model in which the number of clusters is determined automatically.
+        /// </summary>
+        /// <typeparam name="T">The type of target data.</typeparam>
+        /// <param name="featuresSelector">A function to get the features from each element.</param>
+        /// <returns>An empty clustering model in which the number of clusters is determined automatically.</returns>
         public static AutoClusteringModel<T> CreateAuto<T>(Func<T, ArrayVector> featuresSelector)
         {
             if (featuresSelector == null) throw new ArgumentNullException("featuresSelector");
