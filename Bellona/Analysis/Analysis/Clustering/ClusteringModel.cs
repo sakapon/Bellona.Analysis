@@ -46,6 +46,24 @@ namespace Bellona.Analysis.Clustering
 
             return ClusteringHelper.AssignFeatures(Clusters, FeaturesSelector(element));
         }
+
+        public T[][] ToSimpleArray()
+        {
+            return ToSimpleArray(v => v.Value[0]);
+        }
+
+        public T[][] ToSimpleArray(Func<ArrayVector, double> sortKeySelector)
+        {
+            if (sortKeySelector == null) throw new ArgumentNullException("sortKeySelector");
+
+            return Clusters
+                .OrderBy(c => sortKeySelector(c.Centroid))
+                .Select(c => c.Records
+                    .OrderBy(r => sortKeySelector(r.Features))
+                    .Select(r => r.Element)
+                    .ToArray())
+                .ToArray();
+        }
     }
 
     public class ClusteringModel<T> : ClusteringModelBase<T>

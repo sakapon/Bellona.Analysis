@@ -89,12 +89,30 @@ namespace UnitTest.Analysis.Clustering
             model.Clusters.Execute(c => Assert.AreEqual(1, c.Records.Length));
         }
 
+        [TestMethod]
+        public void ToSimpleArray_1()
+        {
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+                .Train(TestData.GetColors())
+                .ToSimpleArray();
+            DisplayResultForColors(model);
+        }
+
         void DisplayResultForColors(ClusteringModelBase<Color> model)
         {
             model.Clusters
                 .Do(c => Console.WriteLine(c.Id))
                 .SelectMany(c => c.DeviationInfo.Records)
                 .Execute(r => Console.WriteLine("{0:F3}, {1}, {2}", r.StandardScore, r.Features, r.Element.Element.Name));
+        }
+
+        void DisplayResultForColors(Color[][] colors)
+        {
+            colors
+                .Select((c, i) => new { color = c, i })
+                .Do(_ => Console.WriteLine(_.i))
+                .SelectMany(_ => _.color)
+                .Execute(c => Console.WriteLine(c.Name));
         }
     }
 }
