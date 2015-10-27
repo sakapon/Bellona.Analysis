@@ -33,6 +33,17 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
+        public void CreateFromNumber_138()
+        {
+            var data = TestData.GetColors().Except(new[] { Color.Fuchsia, Color.Aqua }).ToArray();
+            var model = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, data.Length)
+                .Train(data);
+
+            Assert.AreEqual(data.Length, model.Clusters.Length);
+            model.Clusters.Execute(c => Assert.AreEqual(1, c.Records.Length));
+        }
+
+        [TestMethod]
         public void CreateAuto_1()
         {
             var empty = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B });
@@ -65,6 +76,17 @@ namespace UnitTest.Analysis.Clustering
             var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.GetSaturation(), c.GetBrightness() })
                 .Train(TestData.GetColors());
             DisplayResultForColors(model);
+        }
+
+        [TestMethod]
+        public void CreateAuto_138()
+        {
+            var data = TestData.GetColors().Except(new[] { Color.Fuchsia, Color.Aqua }).ToArray();
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+                .Train(data, maxStandardScore: 0.99);
+
+            Assert.AreEqual(data.Length, model.Clusters.Length);
+            model.Clusters.Execute(c => Assert.AreEqual(1, c.Records.Length));
         }
 
         void DisplayResultForColors(ClusteringModelBase<Color> model)
