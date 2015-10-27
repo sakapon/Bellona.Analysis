@@ -66,7 +66,7 @@ namespace Bellona.Analysis.Clustering
             var records = Records.Concat(newRecords).ToArray();
             if (records.Length == 0) throw new InvalidOperationException("This model has no records.");
 
-            var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.InitializeClusters(ClustersNumber, records);
+            var initial = Clusters.Length > 0 ? Clusters : ClusteringHelper.Initialize(records, ClustersNumber);
             var clusters = ClusteringHelper.TrainForNumber(initial, records, maxIterations);
 
             return new ClusteringModel<T>(FeaturesSelector, clusters, records, ClustersNumber);

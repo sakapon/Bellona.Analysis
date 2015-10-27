@@ -8,7 +8,7 @@ namespace Bellona.Analysis.Clustering
 {
     static class ClusteringHelper
     {
-        public static Cluster<T>[] InitializeClusters<T>(int clustersNumber, IList<ClusteringRecord<T>> records)
+        public static Cluster<T>[] Initialize<T>(IList<ClusteringRecord<T>> records, int clustersNumber)
         {
             return RandomHelper.ShuffleRange(records.Count)
                 .Select(i => records[i])
