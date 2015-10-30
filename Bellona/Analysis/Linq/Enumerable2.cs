@@ -101,16 +101,17 @@ namespace Bellona.Linq
                 action(item);
         }
 
-        public static IEnumerable<TSource> Distinct<TSource, TValue>(this IEnumerable<TSource> source, Func<TSource, TValue> selector)
+        public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null) throw new ArgumentNullException("source");
+            if (keySelector == null) throw new ArgumentNullException("keySelector");
 
-            var valueSet = new HashSet<TValue>();
+            var keySet = new HashSet<TKey>();
 
             foreach (var item in source)
             {
-                var value = selector(item);
-                if (!valueSet.Add(value)) continue;
+                var key = keySelector(item);
+                if (!keySet.Add(key)) continue;
                 yield return item;
             }
         }
