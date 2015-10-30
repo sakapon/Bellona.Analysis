@@ -101,6 +101,14 @@ namespace Bellona.Linq
                 action(item);
         }
 
+        /// <summary>
+        /// Returns distinct elements from a sequence by a key to compare.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="source">A sequence of values.</param>
+        /// <param name="keySelector">A function to extract a key from an element.</param>
+        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains distinct elements from the input sequence.</returns>
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null) throw new ArgumentNullException("source");
