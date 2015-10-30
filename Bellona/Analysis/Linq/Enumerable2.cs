@@ -31,17 +31,37 @@ namespace Bellona.Linq
             return new[] { element };
         }
 
+        /// <summary>
+        /// Generates an infinite sequence that contains one repeated value.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the value to be repeated in the result sequence.</typeparam>
+        /// <param name="element">The value to be repeated.</param>
+        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult element)
         {
             while (true)
                 yield return element;
         }
 
+        /// <summary>
+        /// Generates a sequence that contains one repeated value.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the value to be repeated in the result sequence.</typeparam>
+        /// <param name="element">The value to be repeated.</param>
+        /// <param name="count">The number of times to repeat the value in the generated sequence. <see langword="null"/> if the value is repeated infinitely.</param>
+        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult element, int? count)
         {
             return count.HasValue ? Enumerable.Repeat(element, count.Value) : Repeat(element);
         }
 
+        /// <summary>
+        /// Does an action for each element of a sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">A sequence of values.</param>
+        /// <param name="action">An action to apply to each element.</param>
+        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the same elements as the input sequence.</returns>
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -54,6 +74,11 @@ namespace Bellona.Linq
             }
         }
 
+        /// <summary>
+        /// Executes enumeration of a sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">A sequence of values.</param>
         public static void Execute<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -61,6 +86,12 @@ namespace Bellona.Linq
             foreach (var item in source) ;
         }
 
+        /// <summary>
+        /// Executes enumeration of a sequence, and does an action for each element of the sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">A sequence of values.</param>
+        /// <param name="action">An action to apply to each element.</param>
         public static void Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null) throw new ArgumentNullException("source");
