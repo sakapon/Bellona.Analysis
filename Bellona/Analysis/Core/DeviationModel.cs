@@ -28,6 +28,7 @@ namespace Bellona.Core
 
     /// <summary>
     /// Represents the statistical deviation model that contains target elements.
+    /// This object is immutable.
     /// </summary>
     /// <typeparam name="T">The type of the target elements.</typeparam>
     [DebuggerDisplay(@"\{Records={Records.Length}\}")]

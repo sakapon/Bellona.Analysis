@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Bellona.Core
 {
+    /// <summary>
+    /// Provides a set of methods for random numbers.
+    /// </summary>
     public static class RandomHelper
     {
         static readonly Random _random = new Random();

@@ -17,7 +17,7 @@ namespace Bellona.Analysis.Clustering
         /// </summary>
         /// <typeparam name="T">The type of the target elements.</typeparam>
         /// <param name="featuresSelector">A function to extract features from each element.</param>
-        /// <param name="clustersNumber">A number of clusters.</param>
+        /// <param name="clustersNumber">The number of clusters.</param>
         /// <returns>An empty clustering model in which the number of clusters is fixed.</returns>
         public static ClusteringModel<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
@@ -43,6 +43,7 @@ namespace Bellona.Analysis.Clustering
 
     /// <summary>
     /// Represents the clustering model that contains target elements.
+    /// This object is immutable.
     /// </summary>
     /// <typeparam name="T">The type of the target elements.</typeparam>
     [DebuggerDisplay(@"\{Clusters={Clusters.Length}, Records={Records.Length}\}")]
@@ -60,6 +61,11 @@ namespace Bellona.Analysis.Clustering
             Records = records;
         }
 
+        /// <summary>
+        /// Assigns the specified element to the most suitable cluster in the clusters of the current model.
+        /// </summary>
+        /// <param name="element">A target element.</param>
+        /// <returns>The cluster that the specified element is assigned to.</returns>
         public Cluster<T> Assign(T element)
         {
             if (Clusters.Length == 0) throw new InvalidOperationException("This model is not trained.");
@@ -90,6 +96,11 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
+    /// <summary>
+    /// Represents the clustering model in which the number of clusters is fixed.
+    /// This object is immutable.
+    /// </summary>
+    /// <typeparam name="T">The type of the target elements.</typeparam>
     public class ClusteringModel<T> : ClusteringModelBase<T>
     {
         public int ClustersNumber { get; private set; }
@@ -100,6 +111,12 @@ namespace Bellona.Analysis.Clustering
             ClustersNumber = clustersNumber;
         }
 
+        /// <summary>
+        /// Adds and trains new elements.
+        /// </summary>
+        /// <param name="source">A sequence of elements.</param>
+        /// <param name="maxIterations">The maximum number of iterations.</param>
+        /// <returns>A new clustering model that contains the generated clusters.</returns>
         public ClusteringModel<T> Train(IEnumerable<T> source, int? maxIterations = null)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -115,6 +132,11 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
+    /// <summary>
+    /// Represents the clustering model in which the number of clusters is determined automatically.
+    /// This object is immutable.
+    /// </summary>
+    /// <typeparam name="T">The type of the target elements.</typeparam>
     public class AutoClusteringModel<T> : ClusteringModelBase<T>
     {
         internal AutoClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
@@ -122,6 +144,13 @@ namespace Bellona.Analysis.Clustering
         {
         }
 
+        /// <summary>
+        /// Adds and trains new elements.
+        /// </summary>
+        /// <param name="source">A sequence of elements.</param>
+        /// <param name="maxClustersNumber">The maximum number of clusters.</param>
+        /// <param name="maxStandardScore">The maximum standard score for each cluster.</param>
+        /// <returns>A new clustering model that contains the generated clusters.</returns>
         public AutoClusteringModel<T> Train(IEnumerable<T> source, int? maxClustersNumber = null, double maxStandardScore = 1.645)
         {
             if (source == null) throw new ArgumentNullException("source");
