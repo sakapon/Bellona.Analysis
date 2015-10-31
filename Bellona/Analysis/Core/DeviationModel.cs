@@ -5,8 +5,18 @@ using System.Linq;
 
 namespace Bellona.Core
 {
+    /// <summary>
+    /// Provides a set of methods for the statistical deviation model.
+    /// </summary>
     public static class DeviationModel
     {
+        /// <summary>
+        /// Initializes a statistical deviation model with the specified elements.
+        /// </summary>
+        /// <typeparam name="T">The type of the target elements.</typeparam>
+        /// <param name="source">A sequence of elements.</param>
+        /// <param name="featuresSelector">A function to extract features from each element.</param>
+        /// <returns>A statistical deviation model that contains target elements.</returns>
         public static DeviationModel<T> Create<T>(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -16,6 +26,10 @@ namespace Bellona.Core
         }
     }
 
+    /// <summary>
+    /// Represents the statistical deviation model that contains target elements.
+    /// </summary>
+    /// <typeparam name="T">The type of the target elements.</typeparam>
     [DebuggerDisplay(@"\{Records={Records.Length}\}")]
     public class DeviationModel<T>
     {

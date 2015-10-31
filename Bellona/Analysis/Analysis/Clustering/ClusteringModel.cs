@@ -8,16 +8,16 @@ using Bellona.Linq;
 namespace Bellona.Analysis.Clustering
 {
     /// <summary>
-    /// Provides a set of methods to start clustering.
+    /// Provides a set of methods for the clustering model.
     /// </summary>
     public static class ClusteringModel
     {
         /// <summary>
         /// Initializes a clustering model with the specified number of clusters.
         /// </summary>
-        /// <typeparam name="T">The type of target data.</typeparam>
-        /// <param name="featuresSelector">A function to get the features from each element.</param>
-        /// <param name="clustersNumber">The number of clusters.</param>
+        /// <typeparam name="T">The type of the target elements.</typeparam>
+        /// <param name="featuresSelector">A function to extract features from each element.</param>
+        /// <param name="clustersNumber">A number of clusters.</param>
         /// <returns>An empty clustering model in which the number of clusters is fixed.</returns>
         public static ClusteringModel<T> CreateFromNumber<T>(Func<T, ArrayVector> featuresSelector, int clustersNumber)
         {
@@ -30,8 +30,8 @@ namespace Bellona.Analysis.Clustering
         /// <summary>
         /// Initializes a clustering model in which the number of clusters is determined automatically.
         /// </summary>
-        /// <typeparam name="T">The type of target data.</typeparam>
-        /// <param name="featuresSelector">A function to get the features from each element.</param>
+        /// <typeparam name="T">The type of the target elements.</typeparam>
+        /// <param name="featuresSelector">A function to extract features from each element.</param>
         /// <returns>An empty clustering model in which the number of clusters is determined automatically.</returns>
         public static AutoClusteringModel<T> CreateAuto<T>(Func<T, ArrayVector> featuresSelector)
         {
@@ -41,6 +41,10 @@ namespace Bellona.Analysis.Clustering
         }
     }
 
+    /// <summary>
+    /// Represents the clustering model that contains target elements.
+    /// </summary>
+    /// <typeparam name="T">The type of the target elements.</typeparam>
     [DebuggerDisplay(@"\{Clusters={Clusters.Length}, Records={Records.Length}\}")]
     public abstract class ClusteringModelBase<T>
     {
