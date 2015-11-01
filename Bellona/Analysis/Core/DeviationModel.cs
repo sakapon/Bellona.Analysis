@@ -34,7 +34,14 @@ namespace Bellona.Core
     [DebuggerDisplay(@"\{Records={Records.Length}\}")]
     public class DeviationModel<T>
     {
+        /// <summary>
+        /// Gets the target records.
+        /// </summary>
         public DeviationRecord<T>[] Records { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this model has target records.
+        /// </summary>
         public bool HasRecords { get { return Records.Length > 0; } }
 
         Lazy<ArrayVector> _mean;
@@ -64,12 +71,23 @@ namespace Bellona.Core
     /// Represents the record in the statistical deviation model.
     /// This object is immutable.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the target element.</typeparam>
     [DebuggerDisplay(@"\{{ToDebugString()}\}")]
     public class DeviationRecord<T>
     {
+        /// <summary>
+        /// Gets the parent deviation model.
+        /// </summary>
         public DeviationModel<T> DeviationModel { get; private set; }
+
+        /// <summary>
+        /// Gets the target element.
+        /// </summary>
         public T Element { get; private set; }
+
+        /// <summary>
+        /// Gets the features of the target element.
+        /// </summary>
         public ArrayVector Features { get; private set; }
 
         Lazy<double> _deviation;

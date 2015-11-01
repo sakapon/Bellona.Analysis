@@ -60,7 +60,7 @@ namespace Bellona.Analysis.Clustering
         public Cluster<T>[] Clusters { get; private set; }
 
         /// <summary>
-        /// Gets the records.
+        /// Gets the target records.
         /// </summary>
         public ClusteringRecord<T>[] Records { get; private set; }
 
@@ -69,7 +69,7 @@ namespace Bellona.Analysis.Clustering
         /// </summary>
         /// <param name="featuresSelector">A function to extract features from each element.</param>
         /// <param name="clusters">Clusters.</param>
-        /// <param name="records">Records.</param>
+        /// <param name="records">Target records.</param>
         protected ClusteringModelBase(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
         {
             FeaturesSelector = featuresSelector;
