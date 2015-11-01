@@ -6,6 +6,9 @@ using Bellona.Linq;
 
 namespace Bellona.Analysis.Clustering
 {
+    /// <summary>
+    /// Provides a set of methods for the essential algorithm of clustering.
+    /// </summary>
     static class ClusteringHelper
     {
         public static Cluster<T>[] Initialize<T>(IList<ClusteringRecord<T>> records, int clustersNumber)
