@@ -38,9 +38,17 @@ namespace Bellona.Core
         public bool HasRecords { get { return Records.Length > 0; } }
 
         Lazy<ArrayVector> _mean;
+
+        /// <summary>
+        /// Gets the mean of features for the records.
+        /// </summary>
         public ArrayVector Mean { get { return _mean.Value; } }
 
         Lazy<double> _standardDeviation;
+
+        /// <summary>
+        /// Gets the standard deviation of features for the records.
+        /// </summary>
         public double StandardDeviation { get { return _standardDeviation.Value; } }
 
         internal DeviationModel(IEnumerable<T> source, Func<T, ArrayVector> featuresSelector)
@@ -52,6 +60,11 @@ namespace Bellona.Core
         }
     }
 
+    /// <summary>
+    /// Represents the record in the statistical deviation model.
+    /// This object is immutable.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [DebuggerDisplay(@"\{{ToDebugString()}\}")]
     public class DeviationRecord<T>
     {
@@ -60,9 +73,19 @@ namespace Bellona.Core
         public ArrayVector Features { get; private set; }
 
         Lazy<double> _deviation;
+
+        /// <summary>
+        /// Gets the deviation of the features in the records.
+        /// The value represents the distance between the mean and this features.
+        /// </summary>
         public double Deviation { get { return _deviation.Value; } }
 
         Lazy<double> _standardScore;
+
+        /// <summary>
+        /// Gets the standard score of the features in the records.
+        /// The unit is σ (the standard deviation).
+        /// </summary>
         public double StandardScore { get { return _standardScore.Value; } }
 
         internal DeviationRecord(DeviationModel<T> model, T element, ArrayVector features)
