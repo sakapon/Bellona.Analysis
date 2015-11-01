@@ -10,11 +10,11 @@ namespace Bellona.Linq
     public static class Enumerable2
     {
         /// <summary>
-        /// Creates an <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> from a single object.
+        /// Creates an <see cref="IEnumerable&lt;T&gt;"/> from a single object.
         /// </summary>
         /// <typeparam name="TResult">The type of the object.</typeparam>
         /// <param name="element">An object.</param>
-        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the input object.</returns>
+        /// <returns>An <see cref="IEnumerable&lt;T&gt;"/> that contains the input object.</returns>
         public static IEnumerable<TResult> MakeEnumerable<TResult>(this TResult element)
         {
             yield return element;
@@ -36,7 +36,7 @@ namespace Bellona.Linq
         /// </summary>
         /// <typeparam name="TResult">The type of the value to be repeated in the result sequence.</typeparam>
         /// <param name="element">The value to be repeated.</param>
-        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
+        /// <returns>An <see cref="IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult element)
         {
             while (true)
@@ -49,7 +49,7 @@ namespace Bellona.Linq
         /// <typeparam name="TResult">The type of the value to be repeated in the result sequence.</typeparam>
         /// <param name="element">The value to be repeated.</param>
         /// <param name="count">The number of times to repeat the value in the generated sequence. <see langword="null"/> if the value is repeated infinitely.</param>
-        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
+        /// <returns>An <see cref="IEnumerable&lt;T&gt;"/> that contains a repeated value.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult element, int? count)
         {
             return count.HasValue ? Enumerable.Repeat(element, count.Value) : Repeat(element);
@@ -61,7 +61,7 @@ namespace Bellona.Linq
         /// <typeparam name="TSource">The type of the elements of source.</typeparam>
         /// <param name="source">A sequence of values.</param>
         /// <param name="action">An action to apply to each element.</param>
-        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains the same elements as the input sequence.</returns>
+        /// <returns>An <see cref="IEnumerable&lt;T&gt;"/> that contains the same elements as the input sequence.</returns>
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -108,7 +108,7 @@ namespace Bellona.Linq
         /// <typeparam name="TKey">The type of the key.</typeparam>
         /// <param name="source">A sequence of values.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
-        /// <returns>An <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/> that contains distinct elements from the input sequence.</returns>
+        /// <returns>An <see cref="IEnumerable&lt;T&gt;"/> that contains distinct elements from the input sequence.</returns>
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null) throw new ArgumentNullException("source");
