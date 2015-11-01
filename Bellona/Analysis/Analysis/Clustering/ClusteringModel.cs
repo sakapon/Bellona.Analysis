@@ -13,7 +13,7 @@ namespace Bellona.Analysis.Clustering
     public static class ClusteringModel
     {
         /// <summary>
-        /// Initializes a clustering model with the specified number of clusters.
+        /// Creates an empty clustering model with the specified number of clusters.
         /// </summary>
         /// <typeparam name="T">The type of the target elements.</typeparam>
         /// <param name="featuresSelector">A function to extract features from each element.</param>
@@ -28,7 +28,7 @@ namespace Bellona.Analysis.Clustering
         }
 
         /// <summary>
-        /// Initializes a clustering model in which the number of clusters is determined automatically.
+        /// Creates an empty clustering model in which the number of clusters is determined automatically.
         /// </summary>
         /// <typeparam name="T">The type of the target elements.</typeparam>
         /// <param name="featuresSelector">A function to extract features from each element.</param>
@@ -49,11 +49,27 @@ namespace Bellona.Analysis.Clustering
     [DebuggerDisplay(@"\{Clusters={Clusters.Length}, Records={Records.Length}\}")]
     public abstract class ClusteringModelBase<T>
     {
+        /// <summary>
+        /// Gets the function to extract features from each element.
+        /// </summary>
         protected Func<T, ArrayVector> FeaturesSelector { get; private set; }
 
+        /// <summary>
+        /// Gets the clusters.
+        /// </summary>
         public Cluster<T>[] Clusters { get; private set; }
+
+        /// <summary>
+        /// Gets the records.
+        /// </summary>
         public ClusteringRecord<T>[] Records { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClusteringModelBase&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="featuresSelector">A function to extract features from each element.</param>
+        /// <param name="clusters">Clusters.</param>
+        /// <param name="records">Records.</param>
         protected ClusteringModelBase(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records)
         {
             FeaturesSelector = featuresSelector;
@@ -73,6 +89,10 @@ namespace Bellona.Analysis.Clustering
             return ClusteringHelper.AssignFeatures(Clusters, FeaturesSelector(element));
         }
 
+        /// <summary>
+        /// Creates an array of the target elements grouped by the clusters.
+        /// </summary>
+        /// <returns>An array of the target elements grouped by the clusters.</returns>
         public T[][] ToSimpleArray()
         {
             return Clusters
@@ -82,6 +102,11 @@ namespace Bellona.Analysis.Clustering
                 .ToArray();
         }
 
+        /// <summary>
+        /// Creates an array of the target elements grouped by the clusters.
+        /// </summary>
+        /// <param name="sortKeySelector">A function to extract a sort key from each element.</param>
+        /// <returns>An array of the target elements grouped by the clusters.</returns>
         public T[][] ToSimpleArray(Func<T, double> sortKeySelector)
         {
             if (sortKeySelector == null) throw new ArgumentNullException("sortKeySelector");
@@ -103,6 +128,9 @@ namespace Bellona.Analysis.Clustering
     /// <typeparam name="T">The type of the target elements.</typeparam>
     public class ClusteringModel<T> : ClusteringModelBase<T>
     {
+        /// <summary>
+        /// Gets the number of clusters.
+        /// </summary>
         public int ClustersNumber { get; private set; }
 
         internal ClusteringModel(Func<T, ArrayVector> featuresSelector, Cluster<T>[] clusters, ClusteringRecord<T>[] records, int clustersNumber)
