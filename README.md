@@ -11,7 +11,7 @@ Install-Package Bellona.Analysis
 
 [NuGet Gallery | Bellona.Analysis](https://www.nuget.org/packages/Bellona.Analysis/)
 
-### Usage
+### Usage for Clustering
 
 #### Simplest Way
 The following code creates a trained clustering model with colors data.
@@ -25,6 +25,12 @@ var colors = new[] { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.B
 var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
     .Train(colors);
 ```
+
+The number of clusters doesn't need to be specified for CreateAuto method.
+
+Remark that ClusteringModel\<T\> objects are immutable.
+CreateAuto method returns an empty model, and Train method returns a trained model.
+So use method chaining.
 
 #### Use Result
 You can access the trained result via Clusters property.
