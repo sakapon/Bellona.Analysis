@@ -23,13 +23,10 @@ namespace ColorsWpf
             var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
                 .Train(colors);
 
-            ColorClusters = model.Clusters
-                .Select(c => c.Records
-                    .Select(r => new ColorInfo(r.Element))
-                    .OrderBy(ci => ci.Color.GetHue())
-                    .ToArray())
+            ColorClusters = model
+                .ToSimpleArray(c => c.GetHue())
+                .Select(cs => cs.Select(c => new ColorInfo(c)).ToArray())
                 .Select((cs, i) => new ColorCluster { Id = i, Colors = cs })
-                .OrderBy(cc => cc.Colors.Average(c => c.Color.GetHue()))
                 .ToArray();
         }
     }

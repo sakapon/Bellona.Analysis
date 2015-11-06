@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace Bellona.Core
 {
+    /// <summary>
+    /// Represents a vector featured by an array of <see cref="double"/>.
+    /// <c>double[]</c> can be implicitly converted to this type.
+    /// </summary>
     [DebuggerDisplay(@"\{{ToDebugString()}\}")]
     public class ArrayVector
     {

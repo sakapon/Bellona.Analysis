@@ -34,6 +34,17 @@ namespace UnitTest.Linq
         }
 
         [TestMethod]
+        public void Distinct_1()
+        {
+            var result = Enumerable.Range(1, 10)
+                .Select(x => x * x)
+                .Distinct(x => x % 3)
+                .ToArray();
+
+            CollectionAssert.AreEqual(new[] { 1, 9 }, result);
+        }
+
+        [TestMethod]
         public void Segment_1()
         {
             var result = Enumerable.Range(0, 9)
