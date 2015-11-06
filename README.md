@@ -21,7 +21,7 @@ The following code creates a trained clustering model with colors data.
 var colors = new[] { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.Violet };
 
 // Initializes and trains a clustering model.
-// The lambda expression is to specify features of each color by an array of System.Double.
+// The lambda expression is to extract features from each color by an array of System.Double.
 var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
     .Train(colors);
 ```
@@ -45,6 +45,22 @@ foreach (var record in cluster0.Records)
     Console.WriteLine(record.Element.Name);
 ```
 
+#### Specify Parameters
+
+```c#
+// Specifies the maximum number of clusters and the maximum standard score in σ.
+var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+    .Train(colors, 20, 1.5);
+```
+
+Use `CreateFromNumber` method to fix the number of clusters.
+
+```c#
+// Specifies the number of clusters and the maximum number of iterations.
+var model = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 10)
+    .Train(colors, 30);
+```
+
 #### More Actions
 
 ```c#
@@ -54,6 +70,8 @@ var cluster = model.Assign(Color.Gold);
 // Adds more data to an existing model.
 var model2 = model.Train(colors2);
 ```
+
+Remark that `Assign` method doesn't train the model with the new data.
 
 ### Prerequisites
 * .NET Framework 4.5
