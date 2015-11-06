@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyMetadata("ProjectUrl", "https://github.com/sakapon/Bellona.Analysis")]
 [assembly: AssemblyMetadata("LicenseUrl", "https://github.com/sakapon/Bellona.Analysis/blob/master/LICENSE")]
-[assembly: AssemblyMetadata("Tags", "Machine Learning")]
-[assembly: AssemblyMetadata("ReleaseNotes", "First stable release that has the features for clustering.")]
+[assembly: AssemblyMetadata("Tags", "Machine Learning Clustering")]
+[assembly: AssemblyMetadata("ReleaseNotes", "The first stable release that has the features for clustering.")]
 
 // ComVisible を false に設定すると、その型はこのアセンブリ内で COM コンポーネントから 
 // 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、
