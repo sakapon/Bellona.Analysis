@@ -26,14 +26,14 @@ var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B 
     .Train(colors);
 ```
 
-The number of clusters doesn't need to be specified for CreateAuto method.
+The number of clusters doesn't need to be specified for `CreateAuto` method.
 
-Remark that ClusteringModel\<T\> objects are immutable.
-CreateAuto method returns an empty model, and Train method returns a trained model.
+Remark that `ClusteringModel<T>` objects are immutable.
+`CreateAuto` method returns an empty model, and `Train` method returns a trained model.
 So use method chaining.
 
 #### Use Result
-You can access the trained result via Clusters property.
+You can access the trained result via `Clusters` property.
 
 ```c#
 // Gets a cluster in the trained model.
@@ -42,9 +42,17 @@ Console.WriteLine(cluster0.Id);
 
 // Enumerates colors in cluster0.
 foreach (var record in cluster0.Records)
-{
     Console.WriteLine(record.Element.Name);
-}
+```
+
+#### More Actions
+
+```c#
+// Assigns the gold to the suitable cluster.
+var cluster = model.Assign(Color.Gold);
+
+// Adds more data to an existing model.
+var model2 = model.Train(colors2);
 ```
 
 ### Prerequisites
