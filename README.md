@@ -73,6 +73,13 @@ var model2 = model.Train(colors2);
 
 Remark that `Assign` method doesn't train the model with the new data.
 
+### Samples
+
+The following figure is the result of clustering colors in [the Color structure](https://msdn.microsoft.com/ja-jp/library/system.drawing.color.aspx).  
+![ColorsSample](Images/Clustering/ColorsSample.png)
+
+The sample source code is [ColorsSample](Samples/ColorsSample).
+
 ### Prerequisites
 * .NET Framework 4.5
 
