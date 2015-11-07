@@ -1,8 +1,10 @@
-﻿<Window x:Class="CitiesWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+        x:Class="CitiesWpf.MainWindow"
+        Title="City Clusters" Height="720" Width="720">
+	<Grid>
+		<m:Map Center="36,137" UseInertia="True" ZoomLevel="5"/>
+	</Grid>
 </Window>
