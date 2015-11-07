@@ -75,7 +75,7 @@ Remark that `Assign` method doesn't train the model with the new data.
 
 ### Samples
 The following figure is the result of clustering colors in [the System.Drawing.Color structure](https://msdn.microsoft.com/ja-jp/library/system.drawing.color.aspx), using `CreateAuto` method.
-The sample source code is [ColorsSample](Samples/ColorsSample).  
+The sample source code is [ClusteringSample](Samples/ClusteringSample).  
 ![ColorsSample](Images/Clustering/ColorsSample.png)
 
 ### Prerequisites
