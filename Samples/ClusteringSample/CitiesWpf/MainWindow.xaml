@@ -2,8 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-        x:Class="CitiesWpf.MainWindow"
+        xmlns:local="clr-namespace:CitiesWpf" x:Class="CitiesWpf.MainWindow"
         Title="City Clusters" Height="720" Width="720">
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
 	<Grid>
 		<m:Map Center="36,137" UseInertia="True" ZoomLevel="5"/>
 	</Grid>
