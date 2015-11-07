@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorsWpf", "ColorsWpf\ColorsWpf.csproj", "{D73CDDB5-6328-48EB-B882-D04CAFB0453A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesWpf", "CitiesWpf\CitiesWpf.csproj", "{4E74926F-AB5C-440B-BCFF-ABE51FEB32A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D73CDDB5-6328-48EB-B882-D04CAFB0453A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D73CDDB5-6328-48EB-B882-D04CAFB0453A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D73CDDB5-6328-48EB-B882-D04CAFB0453A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E74926F-AB5C-440B-BCFF-ABE51FEB32A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E74926F-AB5C-440B-BCFF-ABE51FEB32A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E74926F-AB5C-440B-BCFF-ABE51FEB32A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E74926F-AB5C-440B-BCFF-ABE51FEB32A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
