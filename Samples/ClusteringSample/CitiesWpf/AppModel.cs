@@ -25,7 +25,8 @@ namespace CitiesWpf
                 .Where(p => p.PropertyType == typeof(Color))
                 .Select(p => (Color)p.GetValue(null))
                 .Where(c => c.A == 255) // Exclude Transparent.
-                .Where(c => c.GetSaturation() <= 0.9)
+                .Where(c => c.GetSaturation() >= 0.3)
+                .Where(c => c.GetSaturation() < 1.0)
                 .Where(c => c.GetBrightness() <= 0.7)
                 .ToArray();
             var colorsToDisplay = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.GetHue() }, model.Clusters.Length)

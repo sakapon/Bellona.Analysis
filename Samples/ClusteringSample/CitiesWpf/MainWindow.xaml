@@ -6,7 +6,7 @@
         Title="City Clusters" Height="720" Width="720">
 	<Window.Resources>
 		<DataTemplate x:Key="CityDataTemplate">
-			<m:Pushpin Location="{Binding City.Location}" Background="{Binding Color.RGB}"/>
+			<m:Pushpin Location="{Binding City.Location}" Background="{Binding Color.RGB}" ToolTip="{Binding City.CityName}"/>
 		</DataTemplate>
 	</Window.Resources>
 	<Window.DataContext>
