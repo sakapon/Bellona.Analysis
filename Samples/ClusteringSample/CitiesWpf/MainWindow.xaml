@@ -13,7 +13,7 @@
 		<local:AppModel/>
 	</Window.DataContext>
 	<Grid>
-		<m:Map Center="36,137" UseInertia="True" ZoomLevel="5">
+        <m:Map Center="36,137" UseInertia="True" ZoomLevel="5" CredentialsProvider="AqhqJINQAXc7oA1y9GBThn4FmLYP4mgKRiBU_jdk92GX2H_OSkwqqfh0qfUA0a5B">
 			<m:MapItemsControl ItemsSource="{Binding ClusteredCities}" ItemTemplate="{DynamicResource CityDataTemplate}"/>
 		</m:Map>
 	</Grid>
