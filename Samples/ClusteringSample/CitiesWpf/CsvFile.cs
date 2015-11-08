@@ -21,7 +21,7 @@ namespace CitiesWpf
                 if (columnNames == null)
                     columnNames = line;
                 else
-                    yield return columnNames.Zip(line, (c, v) => new { c, v }).ToDictionary(o => o.c, o => o.v);
+                    yield return columnNames.Zip(line, (c, v) => new { c, v }).ToDictionary(o => o.c.ToLowerInvariant(), o => o.v);
             }
         }
 
@@ -32,7 +32,7 @@ namespace CitiesWpf
             var parameters = entityType.ConstructorInfo.GetParameters();
 
             return ReadLines(path, encoding)
-                .Select(d => parameters.Select(p => Convert.ChangeType(d[p.Name], p.ParameterType)).ToArray())
+                .Select(d => parameters.Select(p => Convert.ChangeType(d[p.Name.ToLowerInvariant()], p.ParameterType)).ToArray())
                 .Select(p => entityType.CreateEntity(p));
         }
     }
