@@ -4,10 +4,17 @@
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:local="clr-namespace:CitiesWpf" x:Class="CitiesWpf.MainWindow"
         Title="City Clusters" Height="720" Width="720">
+	<Window.Resources>
+		<DataTemplate x:Key="CityDataTemplate">
+			<m:Pushpin Location="{Binding City.Location}" Background="{Binding Color.RGB}"/>
+		</DataTemplate>
+	</Window.Resources>
 	<Window.DataContext>
 		<local:AppModel/>
 	</Window.DataContext>
 	<Grid>
-		<m:Map Center="36,137" UseInertia="True" ZoomLevel="5"/>
+		<m:Map Center="36,137" UseInertia="True" ZoomLevel="5">
+			<m:MapItemsControl ItemsSource="{Binding ClusteredCities}" ItemTemplate="{DynamicResource CityDataTemplate}"/>
+		</m:Map>
 	</Grid>
 </Window>

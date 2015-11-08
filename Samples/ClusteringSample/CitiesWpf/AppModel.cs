@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Bellona.Analysis.Clustering;
 using Bellona.Core;
+using Microsoft.Maps.MapControl.WPF;
 
 namespace CitiesWpf
 {
@@ -17,7 +18,7 @@ namespace CitiesWpf
         {
             var CityType = EntityType.Create(default(City));
             var cities = CsvFile.ReadEntities("Cities.csv", CityType).ToArray();
-            var model = ClusteringModel.CreateAuto<City>(c => new[] { c.Latitude, c.Longitude })
+            var model = ClusteringModel.CreateAuto<City>(c => new[] { c.Location.Latitude, c.Location.Longitude })
                 .Train(cities);
 
             var colors = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static)
@@ -45,15 +46,13 @@ namespace CitiesWpf
     {
         public int PrefectureId { get; private set; }
         public string CityName { get; private set; }
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
+        public Location Location { get; private set; }
 
         public City(int prefectureId, string cityName, double latitude, double longitude)
         {
             PrefectureId = prefectureId;
             CityName = cityName;
-            Latitude = latitude;
-            Longitude = longitude;
+            Location = new Location(latitude, longitude);
         }
     }
 
