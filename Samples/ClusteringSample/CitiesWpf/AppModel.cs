@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Bellona.Analysis.Clustering;
 using Bellona.Core;
+using Bellona.Linq;
 using Microsoft.Maps.MapControl.WPF;
 
 namespace CitiesWpf
@@ -29,10 +30,10 @@ namespace CitiesWpf
                 .Where(c => c.GetSaturation() < 1.0)
                 .Where(c => c.GetBrightness() <= 0.7)
                 .ToArray();
-            var colorsToDisplay = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.GetHue() }, model.Clusters.Length)
+            var colorsToDisplay = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, model.Clusters.Length)
                 .Train(colors)
                 .Clusters
-                .Select(c => c.Records.GetRandomElement().Element)
+                .Select(GetRepresentativeColor)
                 .ToArray();
 
             ClusteredCities = model.Clusters
@@ -40,6 +41,11 @@ namespace CitiesWpf
                 .OrderBy(c => c.City.PrefectureId)
                 .ToArray();
         }
+
+        static readonly Func<Cluster<Color>, Color> GetRepresentativeColor = c =>
+            c.DeviationInfo.Records
+                .FirstToMin(r => r.StandardScore)
+                .Element.Element;
     }
 
     [DebuggerDisplay(@"\{{CityName}\}")]
