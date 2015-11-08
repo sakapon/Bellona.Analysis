@@ -76,7 +76,7 @@ Remark that `Assign` method doesn't train the model with the new data.
 ### Samples
 The sample source code is [ClusteringSample](Samples/ClusteringSample).
 
-Clustering colors in the [System.Drawing.Color](https://msdn.microsoft.com/ja-jp/library/system.drawing.color.aspx) structure:  
+Clustering colors in the [System.Drawing.Color](https://msdn.microsoft.com/library/system.drawing.color.aspx) structure:  
 ![ColorClusters](Images/Clustering/ColorClusters.png)
 
 Clustering the prefectural capitals in Japan by their positions:  
