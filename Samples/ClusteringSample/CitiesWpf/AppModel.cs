@@ -26,7 +26,7 @@ namespace CitiesWpf
                 .Where(p => p.PropertyType == typeof(Color))
                 .Select(p => (Color)p.GetValue(null))
                 .Where(c => c.A == 255) // Exclude Transparent.
-                .Where(c => c.GetSaturation() >= 0.3)
+                .Where(c => c.GetSaturation() >= 0.5)
                 .Where(c => c.GetSaturation() < 1.0)
                 .Where(c => c.GetBrightness() <= 0.7)
                 .ToArray();
@@ -43,9 +43,10 @@ namespace CitiesWpf
         }
 
         static readonly Func<Cluster<Color>, Color> GetRepresentativeColor = c =>
-            c.DeviationInfo.Records
-                .FirstToMin(r => r.StandardScore)
-                .Element.Element;
+        {
+            var rgb = c.Centroid.Value.Select(v => (int)v).ToArray();
+            return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+        };
     }
 
     [DebuggerDisplay(@"\{{CityName}\}")]
