@@ -1,0 +1,20 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+        xmlns:local="clr-namespace:CitiesWpf" x:Class="CitiesWpf.MainWindow"
+        Title="City Clusters" Height="720" Width="720">
+	<Window.Resources>
+		<DataTemplate x:Key="CityDataTemplate">
+			<m:Pushpin Location="{Binding City.Location}" Background="{Binding Color.RGB}" ToolTip="{Binding City.CityName}"/>
+		</DataTemplate>
+	</Window.Resources>
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+        <m:Map Center="36,137" UseInertia="True" ZoomLevel="5" CredentialsProvider="AqhqJINQAXc7oA1y9GBThn4FmLYP4mgKRiBU_jdk92GX2H_OSkwqqfh0qfUA0a5B">
+			<m:MapItemsControl ItemsSource="{Binding ClusteredCities}" ItemTemplate="{DynamicResource CityDataTemplate}"/>
+		</m:Map>
+	</Grid>
+</Window>
