@@ -90,6 +90,32 @@ namespace UnitTest.Analysis.Clustering
         }
 
         [TestMethod]
+        public void ToAutoModel_1()
+        {
+            var model = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 5)
+                .Train(TestData.GetColors().Take(60));
+            DisplayResultForColors(model);
+
+            var autoModel = model.ToAutoModel();
+            var model2 = autoModel
+                .Train(Enumerable.Empty<Color>());
+            DisplayResultForColors(model2);
+        }
+
+        [TestMethod]
+        public void ToFixedModel_1()
+        {
+            var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+                .Train(TestData.GetColors().Take(30), 5, 1.5);
+            DisplayResultForColors(model);
+
+            var fixedModel = model.ToFixedModel();
+            var model2 = fixedModel
+                .Train(TestData.GetColors().Skip(30).Take(30));
+            DisplayResultForColors(model2);
+        }
+
+        [TestMethod]
         public void ToSimpleArray_1()
         {
             var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })

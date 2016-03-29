@@ -158,6 +158,16 @@ namespace Bellona.Analysis.Clustering
 
             return new ClusteringModel<T>(FeaturesSelector, clusters, records, ClustersNumber);
         }
+
+        /// <summary>
+        /// Creates an <see cref="AutoClusteringModel{T}"/> with the data of this model.
+        /// The number of clusters is not taken over.
+        /// </summary>
+        /// <returns>An <see cref="AutoClusteringModel{T}"/> with the data of this model.</returns>
+        public AutoClusteringModel<T> ToAutoModel()
+        {
+            return new AutoClusteringModel<T>(FeaturesSelector, Clusters, Records);
+        }
     }
 
     /// <summary>
@@ -191,6 +201,16 @@ namespace Bellona.Analysis.Clustering
             var clusters = ClusteringHelper.TrainForAuto(initial, records, maxClustersNumber, maxStandardScore);
 
             return new AutoClusteringModel<T>(FeaturesSelector, clusters, records);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="ClusteringModel{T}"/> with the data of this model.
+        /// The number of clusters is also taken over.
+        /// </summary>
+        /// <returns>A <see cref="ClusteringModel{T}"/> with the data of this model.</returns>
+        public ClusteringModel<T> ToFixedModel()
+        {
+            return new ClusteringModel<T>(FeaturesSelector, Clusters, Records, Clusters.Length);
         }
     }
 }
