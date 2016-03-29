@@ -177,5 +177,39 @@ namespace Bellona.Linq
                 .Aggregate((o1, o2) => o1.v > o2.v ? o1 : o2);
             return o.x;
         }
+
+        /// <summary>
+        /// Prepends an element to the head of sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">A sequence of values.</param>
+        /// <param name="element">The value to be prepended.</param>
+        /// <returns>A concatenated <see cref="IEnumerable{T}"/>.</returns>
+        public static IEnumerable<TSource> Prepend<TSource>(this IEnumerable<TSource> source, TSource element)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            yield return element;
+
+            foreach (var item in source)
+                yield return item;
+        }
+
+        /// <summary>
+        /// Appends an element to the tail of sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">A sequence of values.</param>
+        /// <param name="element">The value to be appended.</param>
+        /// <returns>A concatenated <see cref="IEnumerable{T}"/>.</returns>
+        public static IEnumerable<TSource> Append<TSource>(this IEnumerable<TSource> source, TSource element)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            foreach (var item in source)
+                yield return item;
+
+            yield return element;
+        }
     }
 }
