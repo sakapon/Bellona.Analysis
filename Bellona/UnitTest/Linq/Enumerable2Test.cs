@@ -69,5 +69,29 @@ namespace UnitTest.Linq
             CollectionAssert.AreEqual(new[] { 3, 4, 5 }, result[1]);
             CollectionAssert.AreEqual(new[] { 6, 7 }, result[2]);
         }
+
+        [TestMethod]
+        public void Prepend_1()
+        {
+            var result = Enumerable.Range(0, 10)
+                .Prepend(-1)
+                .ToArray();
+            var expected = Enumerable.Range(-1, 11)
+                .ToArray();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void Append_1()
+        {
+            var result = Enumerable.Range(0, 10)
+                .Append(10)
+                .ToArray();
+            var expected = Enumerable.Range(0, 11)
+                .ToArray();
+
+            CollectionAssert.AreEqual(expected, result);
+        }
     }
 }

@@ -18,9 +18,9 @@ namespace UnitTest
                 .ToArray();
         }
 
-        public static SamplePoint[] GetRandomPoints()
+        public static SamplePoint[] GetRandomPoints(int points)
         {
-            return Enumerable.Range(0, 100)
+            return Enumerable.Range(0, points)
                 .Select(i => new SamplePoint
                 {
                     Id = i,

@@ -46,7 +46,10 @@
     <Compile Include="Analysis\Clustering\ClusteringModel.cs" />
     <Compile Include="Core\ArrayVector.cs" />
     <Compile Include="Core\DeviationModel.cs" />
+    <Compile Include="Core\Lazy2.cs" />
     <Compile Include="Core\RandomHelper.cs" />
+    <Compile Include="IO\CsvFile.cs" />
+    <Compile Include="IO\TextFile.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
