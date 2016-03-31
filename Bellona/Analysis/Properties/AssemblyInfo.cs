@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyMetadata("ProjectUrl", "https://github.com/sakapon/Bellona.Analysis")]
 [assembly: AssemblyMetadata("LicenseUrl", "https://github.com/sakapon/Bellona.Analysis/blob/master/LICENSE")]
 [assembly: AssemblyMetadata("Tags", "Machine Learning Clustering")]
-[assembly: AssemblyMetadata("ReleaseNotes", "The first stable release that has the features for clustering.")]
+[assembly: AssemblyMetadata("ReleaseNotes", "Add minor utility methods.")]
 
 // ComVisible を false に設定すると、その型はこのアセンブリ内で COM コンポーネントから 
 // 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、
@@ -37,8 +37,8 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.12.0")]
-[assembly: AssemblyFileVersion("1.0.12")]
+[assembly: AssemblyVersion("1.1.13.0")]
+[assembly: AssemblyFileVersion("1.1.13")]
 
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("UnitTest")]
