@@ -22,6 +22,9 @@ namespace Bellona.IO
             }
         }
 
+        public static IEnumerable<string> ReadLines(string path, Encoding encoding = null) =>
+            File.ReadLines(path, encoding ?? UTF8N);
+
         public static void WriteLines(this Stream stream, IEnumerable<string> lines, Encoding encoding = null)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
@@ -33,5 +36,8 @@ namespace Bellona.IO
                     writer.WriteLine(line);
             }
         }
+
+        public static void WriteLines(string path, IEnumerable<string> lines, Encoding encoding = null) =>
+            File.WriteAllLines(path, lines, encoding ?? UTF8N);
     }
 }

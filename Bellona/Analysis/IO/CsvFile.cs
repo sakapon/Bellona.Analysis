@@ -36,62 +36,55 @@ namespace Bellona.IO
                 .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
         );
 
-        static TResult ReadFile<TResult>(string path, Func<Stream, TResult> func)
+        static IEnumerable<string[]> ReadRecordsByArray(this IEnumerable<string> lines, bool hasHeader)
         {
-            using (var stream = File.OpenRead(path))
-            {
-                return func(stream);
-            }
-        }
-
-        static void WriteFile(string path, Action<Stream> action)
-        {
-            using (var stream = File.Create(path))
-            {
-                action(stream);
-            }
-        }
-
-        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null)
-        {
-            return stream.ReadLines(encoding)
+            return lines
                 .Skip(hasHeader ? 1 : 0)
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null) =>
-            ReadFile(path, stream => ReadRecordsByArray(stream, hasHeader, encoding));
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null) =>
+            TextFile.ReadLines(stream, encoding).ReadRecordsByArray(hasHeader);
 
-        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null) =>
+            TextFile.ReadLines(path, encoding).ReadRecordsByArray(hasHeader);
+
+        static IEnumerable<string> WriteRecordsByArray(this IEnumerable<string[]> records)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
 
-            var lines = records.Select(ToLine);
-
-            stream.WriteLines(lines, encoding);
+            return records.Select(ToLine);
         }
 
-        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByArray(stream, records, encoding));
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null) =>
+            TextFile.WriteLines(stream, records.WriteRecordsByArray(), encoding);
 
-        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null)
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null) =>
+            TextFile.WriteLines(path, records.WriteRecordsByArray(), encoding);
+
+        static IEnumerable<string> WriteRecordsByArray(this IEnumerable<string[]> records, string[] columnNames)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
             if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
 
-            WriteRecordsByArray(stream, Enumerable.Repeat(columnNames, 1).Concat(records), encoding);
+            return Enumerable.Repeat(columnNames, 1)
+                .Concat(records)
+                .Select(ToLine);
         }
 
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
+            TextFile.WriteLines(stream, records.WriteRecordsByArray(columnNames), encoding);
+
         public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByArray(stream, records, columnNames, encoding));
+            TextFile.WriteLines(path, records.WriteRecordsByArray(columnNames), encoding);
 
         // Supposes that a CSV file has the header line.
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
+        static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(this IEnumerable<string> lines)
         {
-            var lines = stream.ReadLines(encoding).Select(SplitLine);
+            var lines2 = lines.Select(SplitLine);
             string[] columnNames = null;
 
-            foreach (var fields in lines)
+            foreach (var fields in lines2)
             {
                 if (columnNames == null)
                     columnNames = fields;
@@ -100,36 +93,41 @@ namespace Bellona.IO
             }
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
-            ReadFile(path, stream => ReadRecordsByDictionary(stream, encoding));
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null) =>
+            TextFile.ReadLines(stream, encoding).ReadRecordsByDictionary();
 
-        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
+            TextFile.ReadLines(path, encoding).ReadRecordsByDictionary();
+
+        static IEnumerable<string> WriteRecordsByDictionary(this IEnumerable<Dictionary<string, string>> records)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
 
-            var lines = records
+            return records
                 .Select(d => d.Values)
                 .Select(ToLine);
-
-            stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByDictionary(stream, records, encoding));
+        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
+            TextFile.WriteLines(stream, records.WriteRecordsByDictionary(), encoding);
 
-        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
+        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
+            TextFile.WriteLines(path, records.WriteRecordsByDictionary(), encoding);
+
+        static IEnumerable<string> WriteRecordsByDictionary(this IEnumerable<Dictionary<string, string>> records, string[] columnNames)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
             if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
 
-            var lines = Enumerable.Repeat(columnNames, 1)
+            return Enumerable.Repeat(columnNames, 1)
                 .Concat(records.Select(d => columnNames.Select(c => d[c])))
                 .Select(ToLine);
-
-            stream.WriteLines(lines, encoding);
         }
 
+        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null) =>
+            TextFile.WriteLines(stream, records.WriteRecordsByDictionary(columnNames), encoding);
+
         public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByDictionary(stream, records, columnNames, encoding));
+            TextFile.WriteLines(path, records.WriteRecordsByDictionary(columnNames), encoding);
     }
 }
