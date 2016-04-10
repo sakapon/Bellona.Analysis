@@ -87,4 +87,4 @@ Clustering the prefectural capitals in Japan by their positions:
 
 ### Release Notes
 * **v1.0.10** Add the features for clustering.
-* **v1.1.13** Add minor utility methods.
+* **v1.1.14** Add minor utility methods.
