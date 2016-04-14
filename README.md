@@ -11,7 +11,7 @@ Install-Package Bellona.Analysis
 
 [NuGet Gallery | Bellona.Analysis](https://www.nuget.org/packages/Bellona.Analysis/)
 
-### Usage for Clustering
+### Usage of Clustering
 
 #### Simplest Way
 The following code creates a trained clustering model with colors data.
@@ -87,4 +87,5 @@ Clustering the prefectural capitals in Japan by their positions:
 
 ### Release Notes
 * **v1.0.10** Add the features for clustering.
-* **v1.1.14** Add minor utility methods.
+* **v1.1.13** Add minor utility methods.
+* **v1.1.14** Fix bugs.
