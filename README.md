@@ -50,7 +50,8 @@ foreach (var record in cluster0.Records)
 ```c#
 // Specifies the maximum number of clusters and the maximum standard score in σ.
 var model = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
-    .Train(colors, 20, 1.5);
+    .Train(colors, 20, 1.5)
+    .Train(colors2, 30, 1.4);
 ```
 
 Use `CreateFromNumber` method to fix the number of clusters.
@@ -61,17 +62,33 @@ var model = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G
     .Train(colors, 30);
 ```
 
-#### More Actions
+#### Assign Element
+Remark that `Assign` method doesn't train the model with the new data.
 
 ```c#
 // Assigns the gold to the suitable cluster.
 var cluster = model.Assign(Color.Gold);
-
-// Adds more data to an existing model.
-var model2 = model.Train(colors2);
 ```
 
-Remark that `Assign` method doesn't train the model with the new data.
+#### Convert Model Type
+
+```c#
+var autoModel = ClusteringModel.CreateAuto<Color>(c => new double[] { c.R, c.G, c.B })
+    .Train(colors);
+
+// Converts AutoClusteringModel to ClusteringModel.
+var fixedModel = autoModel.ToFixedModel()
+    .Train(colors2);
+```
+
+```c#
+var fixedModel = ClusteringModel.CreateFromNumber<Color>(c => new double[] { c.R, c.G, c.B }, 10)
+    .Train(colors);
+
+// Converts ClusteringModel to AutoClusteringModel.
+var autoModel = fixedModel.ToAutoModel()
+    .Train(colors2);
+```
 
 ### Samples
 The sample source code is [ClusteringSample](Samples/ClusteringSample).
