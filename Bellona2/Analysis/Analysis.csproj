@@ -1,7 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <AssemblyName>Bellona.Analysis</AssemblyName>
+    <RootNamespace>Bellona</RootNamespace>
+    <Version>2.0.14</Version>
+    <Title>Bellona.Analysis</Title>
+    <AssemblyTitle>Bellona.Analysis</AssemblyTitle>
+    <Product>Bellona</Product>
+    <Description>The library for statistical analysis.</Description>
+    <Authors>Keiho Sakapon</Authors>
+    <Copyright>© 2015 Keiho Sakapon</Copyright>
+    <PackageProjectUrl>https://github.com/sakapon/Bellona.Analysis</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/sakapon/Bellona.Analysis/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>Machine Learning Clustering</PackageTags>
+    <PackageReleaseNotes>For .NET Standard.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DocumentationFile>bin\Release\Bellona.Analysis.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
