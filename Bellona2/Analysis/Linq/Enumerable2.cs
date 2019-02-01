@@ -178,6 +178,7 @@ namespace Bellona.Linq
             return o.x;
         }
 
+#if NET45
         /// <summary>
         /// Prepends an element to the head of sequence.
         /// </summary>
@@ -211,5 +212,6 @@ namespace Bellona.Linq
 
             yield return element;
         }
+#endif
     }
 }
