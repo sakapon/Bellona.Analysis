@@ -1,4 +1,7 @@
 ## Bellona.Analysis
+[![license](https://img.shields.io/github/license/sakapon/Bellona.Analysis.svg)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/Bellona.Analysis.svg)](https://www.nuget.org/packages/Bellona.Analysis/)
+[![NuGet](https://img.shields.io/nuget/dt/Bellona.Analysis.svg)](https://www.nuget.org/packages/Bellona.Analysis/)
 
 The library for statistical analysis.
 
@@ -99,10 +102,12 @@ Clustering colors in the [System.Drawing.Color structure](https://msdn.microsoft
 Clustering the prefectural capitals in Japan by their positions:  
 ![CityClusters](Images/Clustering/CityClusters.png)
 
-### Prerequisites
-* .NET Framework 4.5
+### Target Frameworks
+- .NET Standard 2.0
+- .NET Framework 4.5
 
 ### Release Notes
-* **v1.0.10** Add the features for clustering.
-* **v1.1.13** Add minor utility methods.
-* **v1.1.14** Fix bugs.
+- **v2.0.15** For .NET Standard.
+- **v1.1.14** Fix bugs.
+- **v1.1.13** Add minor utility methods.
+- **v1.0.10** Add the features for clustering.
